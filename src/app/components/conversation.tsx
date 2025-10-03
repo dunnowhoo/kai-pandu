@@ -85,15 +85,32 @@ export function Conversation({ onTranscriptUpdate, onNavigate, autoStart = false
 1. 🎫 Pesan Tiket - untuk pemesanan tiket kereta api
 2. 🧭 Navigasi Stasiun - bantuan arah di dalam stasiun  
 3. ❓ Bantuan - informasi dan dukungan umum
+4. 📷 Akses Webcam - aktifkan kamera untuk fitur tambahan
 
 Silakan pilih menu yang Anda inginkan.`;
-        
+
         if (onTranscriptUpdate) {
           onTranscriptUpdate('KAI Pandu', menuInfo);
         }
         return menuInfo;
       },
-      
+
+      // Tool untuk meminta akses webcam
+      requestWebcamAccess: async () => {
+        try {
+          await navigator.mediaDevices.getUserMedia({ video: true });
+          if (onTranscriptUpdate) {
+            onTranscriptUpdate('KAI Pandu', '✅ Akses webcam berhasil diaktifkan.');
+          }
+          return 'Akses webcam berhasil diaktifkan.';
+        } catch (error) {
+          if (onTranscriptUpdate) {
+            onTranscriptUpdate('KAI Pandu', '❌ Gagal mengaktifkan webcam. Izin diperlukan.');
+          }
+          return 'Gagal mengaktifkan webcam. Pastikan izin kamera diberikan.';
+        }
+      },
+
       // Tool untuk konfirmasi pemesanan
       confirmTicketBooking: ({ from, to, date, passenger }: { 
         from: string; 

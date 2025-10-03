@@ -1,3 +1,5 @@
+import Image from 'next/image';
+
 const KAI_BACKGROUND_IMAGE = '/images/KAI_bg1.png';
 
 export default function Home() {
@@ -48,7 +50,13 @@ export default function Home() {
         <div className="bg-white rounded-3xl shadow-xl p-6 mb-4">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg"></div>
+                <Image
+                src="/images/kaipaylogo.png"
+                alt="KAI Pay Logo"
+                width={40}
+                height={40}
+                className="rounded-lg object-contain"
+                />
               <div>
                 <h2 className="text-xl font-bold text-gray-800">KAI PAY</h2>
                 <div className="flex items-center gap-2 mt-1">
@@ -241,43 +249,6 @@ export default function Home() {
           </div>
         </a>
 
-        {/* Security Dashboard Feature Banner - NEW */}
-        <a href="/security-dashboard" className="block mb-6">
-          <div className="bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-600 rounded-3xl p-6 shadow-xl relative overflow-hidden group hover:scale-[1.02] transition-transform">
-            {/* Animated Background Effect */}
-            <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 transform -skew-x-12 group-hover:translate-x-full transition-transform duration-1000"></div>
-            
-            <div className="relative">
-              <div className="flex items-start justify-between mb-3">
-                <div className="flex items-center gap-2">
-                  <span className="text-2xl">🛡️</span>
-                  <span className="bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full">SECURITY</span>
-                </div>
-                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </div>
-              
-              <h3 className="text-white text-2xl font-bold mb-2">Dashboard Satpam</h3>
-              <p className="text-white/90 text-sm mb-4">
-                👥 Track Disabilitas • 🚂 Info Kereta • 📋 Assign Security
-              </p>
-              
-              <div className="bg-white/20 backdrop-blur-sm rounded-xl p-3 flex items-center gap-3">
-                <div className="w-10 h-10 bg-white/30 rounded-lg flex items-center justify-center">
-                  <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12,1L3,5V11C3,16.55 6.84,21.74 12,23C17.16,21.74 21,16.55 21,11V5L12,1M12,7C13.4,7 14.8,8.6 14.8,10V11H16V16H8V11H9.2V10C9.2,8.6 10.6,7 12,7M12,8.2C11.2,8.2 10.4,8.7 10.4,10V11H13.6V10C13.6,8.7 12.8,8.2 12,8.2Z"/>
-                  </svg>
-                </div>
-                <div>
-                  <p className="text-white text-sm font-bold">Akses Dashboard Security</p>
-                  <p className="text-white/80 text-xs">Kelola bantuan penumpang disabilitas</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </a>
-
         {/* Trip Planner */}
         <div className="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-3xl p-6 mb-6 shadow-xl flex items-center justify-between">
           <div className="flex items-center gap-4">
@@ -304,10 +275,10 @@ export default function Home() {
             <div className="flex items-center gap-3">
               <span className="text-2xl">ℹ️</span>
               <div className="flex-1">
-                <p className="text-white text-sm font-semibold">Pelajari tentang KAI Pandu</p>
-                <p className="text-white/70 text-xs">Fitur aksesibilitas untuk semua</p>
+                <p className="text-black text-sm font-semibold">Pelajari tentang KAI Pandu</p>
+                <p className="text-black/70 text-xs">Fitur aksesibilitas untuk semua</p>
               </div>
-              <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
             </div>
