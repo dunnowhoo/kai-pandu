@@ -98,12 +98,14 @@ Silakan pilih menu yang Anda inginkan.`;
       // Tool untuk meminta akses webcam
       requestWebcamAccess: async () => {
         try {
-          await navigator.mediaDevices.getUserMedia({ video: true });
+          const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+          console.log('✅ Webcam stream:', stream);
           if (onTranscriptUpdate) {
             onTranscriptUpdate('KAI Pandu', '✅ Akses webcam berhasil diaktifkan.');
           }
           return 'Akses webcam berhasil diaktifkan.';
         } catch (error) {
+          console.error('❌ Webcam error:', error);
           if (onTranscriptUpdate) {
             onTranscriptUpdate('KAI Pandu', '❌ Gagal mengaktifkan webcam. Izin diperlukan.');
           }
@@ -178,13 +180,15 @@ Pemesanan Anda sedang diproses...`;
   // Request microphone permission
   const requestMicrophonePermission = useCallback(async () => {
     try {
-      await navigator.mediaDevices.getUserMedia({ audio: true });
+      // Request both audio and video for WebRTC
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
       setIsPermissionGranted(true);
       setError(null);
+      console.log('✅ Media stream granted:', stream);
       return true;
     } catch (error) {
-      console.error('❌ Microphone permission denied:', error);
-      setError('Izin mikrofon diperlukan untuk menggunakan KAI Pandu');
+      console.error('❌ Media permission denied:', error);
+      setError('Izin mikrofon dan kamera diperlukan untuk menggunakan KAI Pandu');
       setIsPermissionGranted(false);
       return false;
     }
