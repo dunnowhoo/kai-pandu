@@ -151,8 +151,16 @@ export default function Home() {
               </svg>
             </div>
             {/* Changed from text-white to text-gray-300 for better contrast on dark background */}
-            <span className="text-xs font-semibold **text-gray-300** text-center">Airport</span>
+            <span className="text-xs font-semibold text-gray-300 text-center">Airport</span>
           </button>
+          <a href="/security-dashboard" className="flex flex-col items-center gap-3 min-w-[90px]">
+            <div className="w-20 h-20 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-full flex items-center justify-center shadow-lg">
+              <svg className="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12,1L3,5V11C3,16.55 6.84,21.74 12,23C17.16,21.74 21,16.55 21,11V5L12,1M12,7C13.4,7 14.8,8.6 14.8,10V11H16V16H8V11H9.2V10C9.2,8.6 10.6,7 12,7M12,8.2C11.2,8.2 10.4,8.7 10.4,10V11H13.6V10C13.6,8.7 12.8,8.2 12,8.2Z"/>
+              </svg>
+            </div>
+            <span className="text-xs font-semibold text-gray-300 text-center">Security Dashboard</span>
+          </a>
         </div>
 
         {/* Additional Services */}
@@ -227,6 +235,43 @@ export default function Home() {
                 <div>
                   <p className="text-white text-sm font-bold">Tap untuk mengaktifkan</p>
                   <p className="text-white/80 text-xs">Asisten perjalanan dengan AI</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </a>
+
+        {/* Security Dashboard Feature Banner - NEW */}
+        <a href="/security-dashboard" className="block mb-6">
+          <div className="bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-600 rounded-3xl p-6 shadow-xl relative overflow-hidden group hover:scale-[1.02] transition-transform">
+            {/* Animated Background Effect */}
+            <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 transform -skew-x-12 group-hover:translate-x-full transition-transform duration-1000"></div>
+            
+            <div className="relative">
+              <div className="flex items-start justify-between mb-3">
+                <div className="flex items-center gap-2">
+                  <span className="text-2xl">🛡️</span>
+                  <span className="bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full">SECURITY</span>
+                </div>
+                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </div>
+              
+              <h3 className="text-white text-2xl font-bold mb-2">Dashboard Satpam</h3>
+              <p className="text-white/90 text-sm mb-4">
+                👥 Track Disabilitas • 🚂 Info Kereta • 📋 Assign Security
+              </p>
+              
+              <div className="bg-white/20 backdrop-blur-sm rounded-xl p-3 flex items-center gap-3">
+                <div className="w-10 h-10 bg-white/30 rounded-lg flex items-center justify-center">
+                  <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12,1L3,5V11C3,16.55 6.84,21.74 12,23C17.16,21.74 21,16.55 21,11V5L12,1M12,7C13.4,7 14.8,8.6 14.8,10V11H16V16H8V11H9.2V10C9.2,8.6 10.6,7 12,7M12,8.2C11.2,8.2 10.4,8.7 10.4,10V11H13.6V10C13.6,8.7 12.8,8.2 12,8.2Z"/>
+                  </svg>
+                </div>
+                <div>
+                  <p className="text-white text-sm font-bold">Akses Dashboard Security</p>
+                  <p className="text-white/80 text-xs">Kelola bantuan penumpang disabilitas</p>
                 </div>
               </div>
             </div>
