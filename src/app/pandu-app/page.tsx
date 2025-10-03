@@ -26,6 +26,7 @@ export default function PanduApp() {
   const [selectedDate, setSelectedDate] = useState('');
   const [selectedClass, setSelectedClass] = useState('');
   const [selectedPayment, setSelectedPayment] = useState('');
+  const [isRoundTrip, setIsRoundTrip] = useState(false);
 
   // Add to transcript
   const addToTranscript = (speaker: string, message: string) => {
@@ -33,6 +34,40 @@ export default function PanduApp() {
       speaker,
       text: message,
     }]);
+  };
+
+  // Handle booking data from voice assistant
+  const handleBookingData = (data: {
+    from?: string;
+    to?: string;
+    date?: string;
+    trainType?: string;
+    class?: string;
+  }) => {
+    console.log('📝 Received booking data from voice:', data);
+    
+    if (data.from) {
+      setSelectedOrigin(data.from);
+      console.log('✅ Set origin:', data.from);
+    }
+    if (data.to) {
+      setSelectedDestination(data.to);
+      console.log('✅ Set destination:', data.to);
+    }
+    if (data.date) {
+      setSelectedDate(data.date);
+      console.log('✅ Set date:', data.date);
+    }
+    if (data.trainType) {
+      setSelectedType(data.trainType);
+      console.log('✅ Set train type:', data.trainType);
+    }
+    if (data.class) {
+      setSelectedClass(data.class);
+      console.log('✅ Set class:', data.class);
+    }
+    
+    addToTranscript('System', `✅ Data pemesanan telah diperbarui`);
   };
 
   // Handle navigation from voice commands
@@ -152,7 +187,6 @@ export default function PanduApp() {
                         <span className="text-6xl">🚄</span>
                       </div>
                       <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2">
-                        <span className="bg-white px-3 py-1 rounded-full text-sm font-medium shadow-lg">KAI Pandu</span>
                       </div>
                     </div>
 
@@ -231,9 +265,12 @@ export default function PanduApp() {
                         {/* Ticket Booking */}
                         <button
                           onClick={() => {
-                            setCurrentView('ticket-booking');
+                            console.log('🎫 Button "Pesan Tiket dengan Suara" clicked');
                             addToTranscript('Anda', 'Pesan tiket dengan suara');
-                            addToTranscript('KAI Pandu', 'Baik, Anda mau pesan tiket kereta jenis apa?');
+                            addToTranscript('KAI Pandu', 'Membuka halaman pemesanan tiket...');
+                            
+                            // Navigate to new tiket page
+                            router.push('/pandu-app/tiket');
                           }}
                           className="w-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300"
                         >
@@ -621,6 +658,88 @@ function TicketBookingView({
 
 // NAVIGATION COMPONENT
 function NavigationView({ phase, onPhaseChange, onBack }: any) {
+  const [stream, setStream] = useState<MediaStream | null>(null);
+  const [error, setError] = useState<string>('');
+  const [facingMode, setFacingMode] = useState<'user' | 'environment'>('environment');
+  const videoRef = useState<HTMLVideoElement | null>(null);
+
+  // Start camera when component mounts or facingMode changes
+  useEffect(() => {
+    let currentStream: MediaStream | null = null;
+
+    const startCamera = async () => {
+      try {
+        // Stop previous stream if exists
+        if (currentStream) {
+          currentStream.getTracks().forEach(track => track.stop());
+        }
+
+        const mediaStream = await navigator.mediaDevices.getUserMedia({
+          video: {
+            facingMode: facingMode, // Use selected camera
+            width: { ideal: 1920 },
+            height: { ideal: 1080 }
+          },
+          audio: false
+        });
+
+        currentStream = mediaStream;
+        setStream(mediaStream);
+        setError('');
+
+        // Attach stream to video element
+        if (videoRef[0]) {
+          videoRef[0].srcObject = mediaStream;
+        }
+      } catch (err: any) {
+        console.error('Error accessing camera:', err);
+        setError(err.message || 'Tidak dapat mengakses kamera');
+      }
+    };
+
+    startCamera();
+
+    // Cleanup function to stop camera when component unmounts
+    return () => {
+      if (currentStream) {
+        currentStream.getTracks().forEach(track => track.stop());
+      }
+    };
+  }, [facingMode]);
+
+  // Update video element when stream changes
+  useEffect(() => {
+    if (stream && videoRef[0]) {
+      videoRef[0].srcObject = stream;
+    }
+  }, [stream]);
+
+  const toggleCamera = () => {
+    setFacingMode(prev => prev === 'environment' ? 'user' : 'environment');
+  };
+
+  const capturePhoto = () => {
+    if (videoRef[0]) {
+      const canvas = document.createElement('canvas');
+      canvas.width = videoRef[0].videoWidth;
+      canvas.height = videoRef[0].videoHeight;
+      const ctx = canvas.getContext('2d');
+      if (ctx) {
+        ctx.drawImage(videoRef[0], 0, 0);
+        canvas.toBlob((blob) => {
+          if (blob) {
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `kai-navigation-${Date.now()}.jpg`;
+            a.click();
+            URL.revokeObjectURL(url);
+          }
+        }, 'image/jpeg');
+      }
+    }
+  };
+
   const getPhaseStatus = () => {
     switch (phase) {
       case 'gate': return { icon: '🚪', text: 'Menuju Gate 3', instruction: 'Jalan lurus 30m, belok kiri' };
@@ -646,24 +765,59 @@ function NavigationView({ phase, onPhaseChange, onBack }: any) {
               <span className="text-sm font-medium">{status.text}</span>
             </div>
           </div>
-          <button onClick={onBack} className="text-white">
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
+          <div className="flex items-center gap-2">
+            {/* Camera Switch Button */}
+            <button 
+              onClick={toggleCamera}
+              className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/30 transition-colors"
+              title="Switch Camera"
+            >
+              <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+              </svg>
+            </button>
+            {/* Close Button */}
+            <button 
+              onClick={onBack} 
+              className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/30 transition-colors"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* Camera View (Simulated) */}
-      <div className="absolute inset-0 bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
-        <div className="text-center text-white/50">
-          <svg className="w-24 h-24 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
-          </svg>
-          <p className="text-sm">Camera View</p>
-          <p className="text-xs">AR Navigation Active</p>
-        </div>
+      {/* Camera View (Live Feed) */}
+      <div className="absolute inset-0 bg-black flex items-center justify-center">
+        {error ? (
+          <div className="text-center text-white">
+            <svg className="w-24 h-24 mx-auto mb-4 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+            <p className="text-sm text-red-400 mb-2">Kamera Error</p>
+            <p className="text-xs text-white/70">{error}</p>
+          </div>
+        ) : !stream ? (
+          <div className="text-center text-white">
+            <div className="w-16 h-16 border-4 border-white border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+            <p className="text-sm">Memuat Kamera...</p>
+          </div>
+        ) : (
+          <video
+            ref={(el) => {
+              videoRef[0] = el;
+              if (el && stream) {
+                el.srcObject = stream;
+              }
+            }}
+            autoPlay
+            playsInline
+            muted
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+        )}
       </div>
 
       {/* AR Overlays */}
@@ -706,13 +860,20 @@ function NavigationView({ phase, onPhaseChange, onBack }: any) {
             </div>
           )}
 
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-4 gap-3">
             <button
               onClick={() => {/* Repeat audio */}}
               className="bg-white/20 backdrop-blur-sm py-3 px-4 rounded-xl text-center hover:bg-white/30 transition-colors"
             >
               <div className="text-lg mb-1">🔄</div>
               <div className="text-xs">Ulangi</div>
+            </button>
+            <button
+              onClick={capturePhoto}
+              className="bg-white/20 backdrop-blur-sm py-3 px-4 rounded-xl text-center hover:bg-white/30 transition-colors"
+            >
+              <div className="text-lg mb-1">📸</div>
+              <div className="text-xs">Foto</div>
             </button>
             <button
               onClick={() => {
@@ -725,14 +886,14 @@ function NavigationView({ phase, onPhaseChange, onBack }: any) {
               className="bg-white/20 backdrop-blur-sm py-3 px-4 rounded-xl text-center hover:bg-white/30 transition-colors"
             >
               <div className="text-lg mb-1">➡️</div>
-              <div className="text-xs">Selanjutnya</div>
+              <div className="text-xs">Next</div>
             </button>
             <button
               onClick={onBack}
               className="bg-white/20 backdrop-blur-sm py-3 px-4 rounded-xl text-center hover:bg-white/30 transition-colors"
             >
               <div className="text-lg mb-1">🛑</div>
-              <div className="text-xs">Berhenti</div>
+              <div className="text-xs">Stop</div>
             </button>
           </div>
         </div>

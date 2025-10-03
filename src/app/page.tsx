@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 
 const KAI_BACKGROUND_IMAGE = '/images/KAI_bg1.png';
 
@@ -323,12 +324,12 @@ export default function Home() {
             </svg>
             <span className="text-xs font-medium text-gray-400">Train</span>
           </button>
-          <button className="flex flex-col items-center gap-1">
+          <Link href="/my-ticket" className="flex flex-col items-center gap-1">
             <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 24 24">
               <path d="M22 10V6c0-1.11-.9-2-2-2H4c-1.1 0-1.99.89-1.99 2v4c1.1 0 1.99.9 1.99 2s-.89 2-2 2v4c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2v-4c-1.1 0-2-.9-2-2s.9-2 2-2zm-2-1.46c-1.19.69-2 1.99-2 3.46s.81 2.77 2 3.46V18H4v-2.54c1.19-.69 2-1.99 2-3.46 0-1.48-.8-2.77-1.99-3.46L4 6h16v2.54zM11 15h2v2h-2zm0-4h2v2h-2zm0-4h2v2h-2z"/>
             </svg>
             <span className="text-xs font-medium text-gray-400">My Ticket</span>
-          </button>
+          </Link>
           <button className="flex flex-col items-center gap-1">
             <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 24 24">
               <path d="M21 5c-1.11-.35-2.33-.5-3.5-.5-1.95 0-4.05.4-5.5 1.5-1.45-1.1-3.55-1.5-5.5-1.5S2.45 4.9 1 6v14.65c0 .25.25.5.5.5.1 0 .15-.05.25-.05C3.1 20.45 5.05 20 6.5 20c1.95 0 4.05.4 5.5 1.5 1.35-.85 3.8-1.5 5.5-1.5 1.65 0 3.35.3 4.75 1.05.1.05.15.05.25.05.25 0 .5-.25.5-.5V6c-.6-.45-1.25-.75-2-1zm0 13.5c-1.1-.35-2.3-.5-3.5-.5-1.7 0-4.15.65-5.5 1.5V8c1.35-.85 3.8-1.5 5.5-1.5 1.2 0 2.4.15 3.5.5v11.5z"/>

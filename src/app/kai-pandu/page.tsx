@@ -22,12 +22,12 @@ export default function KaiPandu() {
           <div className="text-center">
             <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-md rounded-full px-4 py-2 mb-4">
               <span className="text-2xl">🌟</span>
-              <span className="text-white font-semibold text-sm">New Feature</span>
+              <span className="text-white font-semibold text-sm">Fitur Baru</span>
             </div>
             <h1 className="text-4xl font-bold text-white mb-3">KAI Pandu</h1>
-            <p className="text-white/90 text-lg mb-2">Accessible Journey Companion</p>
+            <p className="text-white/90 text-lg mb-2">Pendamping Perjalanan Aksesibel</p>
             <p className="text-white/80 text-sm px-6">
-              Empowering visually impaired passengers with AI-powered voice assistance & smart navigation
+              Memberdayakan penumpang tunanetra dengan asisten suara berbasis AI & navigasi pintar
             </p>
           </div>
         </header>
@@ -42,9 +42,9 @@ export default function KaiPandu() {
                 <span className="text-2xl">⚠️</span>
               </div>
               <div>
-                <h3 className="text-white font-bold text-lg mb-2">The Challenge</h3>
+                <h3 className="text-white font-bold text-lg mb-2">Tantangan</h3>
                 <p className="text-white/90 text-sm leading-relaxed">
-                  ±4 million visually impaired people in Indonesia (1.5% population) face barriers in using public transportation independently.
+                  ±4 juta penyandang tunanetra di Indonesia (1,5% populasi) menghadapi kendala dalam menggunakan transportasi umum secara mandiri.
                 </p>
               </div>
             </div>
@@ -53,7 +53,7 @@ export default function KaiPandu() {
           {/* Features Section */}
           <div className="mb-6">
             <h2 className="text-white text-2xl font-bold mb-4 flex items-center gap-2">
-              <span>💡</span> Key Features
+              <span>💡</span> Fitur Utama
             </h2>
 
             {/* Feature 1: Voice Booking */}
@@ -66,8 +66,8 @@ export default function KaiPandu() {
                   </svg>
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-gray-900 text-xl font-bold">Voice Ticket Booking</h3>
-                  <p className="text-gray-600 text-sm">Book tickets hands-free</p>
+                  <h3 className="text-gray-900 text-xl font-bold">Pemesanan Tiket Suara</h3>
+                  <p className="text-gray-600 text-sm">Pesan tiket tanpa menyentuh layar</p>
                 </div>
               </div>
               
@@ -83,16 +83,16 @@ export default function KaiPandu() {
                       "Saya ingin pesan tiket dari Gambir ke Yogyakarta tanggal 15 Oktober, ada kereta apa saja?"
                     </p>
                     <p className="text-gray-600 text-xs">
-                      → AI Assistant guides you step-by-step until payment complete
+                      → Asisten AI memandu Anda langkah demi langkah hingga pembayaran selesai
                     </p>
                   </div>
                 </div>
               </div>
 
               <div className="flex flex-wrap gap-2">
-                <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-medium">Voice Command</span>
-                <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-medium">Natural Language</span>
-                <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-medium">AI Assistant</span>
+                <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-medium">Perintah Suara</span>
+                <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-medium">Bahasa Alami</span>
+                <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-medium">Asisten AI</span>
               </div>
             </div>
 
@@ -105,8 +105,8 @@ export default function KaiPandu() {
                   </svg>
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-gray-900 text-xl font-bold">Smart Wayfinding</h3>
-                  <p className="text-gray-600 text-sm">Navigate station with ease</p>
+                  <h3 className="text-gray-900 text-xl font-bold">Navigasi Pintar Stasiun</h3>
+                  <p className="text-gray-600 text-sm">Jelajahi stasiun dengan mudah</p>
                 </div>
               </div>
 
@@ -118,7 +118,7 @@ export default function KaiPandu() {
                     </svg>
                   </div>
                   <p className="text-gray-700 text-sm flex-1">
-                    <strong>Computer Vision</strong> detects signage, guiding blocks, platform numbers
+                    <strong>Computer Vision</strong> mendeteksi papan petunjuk, jalur pemandu, nomor peron
                   </p>
                 </div>
 
@@ -130,14 +130,14 @@ export default function KaiPandu() {
                     </svg>
                   </div>
                   <p className="text-gray-700 text-sm flex-1">
-                    <strong>Voice Guide:</strong> "Gate 20m ahead, turn right to Platform 3"
+                    <strong>Panduan Suara:</strong> "Gerbang 20m di depan, belok kanan ke Peron 3"
                   </p>
                 </div>
               </div>
 
               <div className="flex flex-wrap gap-2">
-                <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">CV Detection</span>
-                <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">Real-time Audio</span>
+                <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">Deteksi CV</span>
+                <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">Audio Real-time</span>
               </div>
             </div>
 
@@ -150,8 +150,8 @@ export default function KaiPandu() {
                   </svg>
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-gray-900 text-xl font-bold">Onboard Assistant</h3>
-                  <p className="text-gray-600 text-sm">Find your seat & destination</p>
+                  <h3 className="text-gray-900 text-xl font-bold">Asisten di Kereta</h3>
+                  <p className="text-gray-600 text-sm">Temukan tempat duduk & tujuan Anda</p>
                 </div>
               </div>
 
@@ -162,7 +162,7 @@ export default function KaiPandu() {
                       <path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/>
                     </svg>
                   </div>
-                  <span>Guides to correct seat after boarding</span>
+                  <span>Memandu ke tempat duduk yang benar setelah naik</span>
                 </li>
                 <li className="flex items-center gap-3 text-gray-700 text-sm">
                   <div className="w-6 h-6 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0">
@@ -170,7 +170,7 @@ export default function KaiPandu() {
                       <path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/>
                     </svg>
                   </div>
-                  <span>Alert before destination station</span>
+                  <span>Peringatan sebelum tiba di stasiun tujuan</span>
                 </li>
                 <li className="flex items-center gap-3 text-gray-700 text-sm">
                   <div className="w-6 h-6 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0">
@@ -178,13 +178,13 @@ export default function KaiPandu() {
                       <path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/>
                     </svg>
                   </div>
-                  <span>Emergency assistance button</span>
+                  <span>Tombol bantuan darurat</span>
                 </li>
               </ul>
 
               <div className="flex flex-wrap gap-2">
-                <span className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs font-medium">Seat Navigation</span>
-                <span className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs font-medium">Arrival Alert</span>
+                <span className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs font-medium">Navigasi Kursi</span>
+                <span className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs font-medium">Peringatan Tiba</span>
               </div>
             </div>
           </div>
@@ -198,25 +198,25 @@ export default function KaiPandu() {
                 </svg>
               </div>
               <div className="flex-1">
-                <h3 className="text-white text-xl font-bold">Security Dashboard</h3>
-                <p className="text-white/90 text-sm">For KAI Staff</p>
+                <h3 className="text-white text-xl font-bold">Dashboard Keamanan</h3>
+                <p className="text-white/90 text-sm">Untuk Petugas KAI</p>
               </div>
             </div>
 
             <div className="space-y-3">
               <div className="bg-white/20 backdrop-blur-sm rounded-xl p-3">
                 <p className="text-white text-sm">
-                  🎯 <strong>Real-time tracking</strong> of KAI Pandu users in station
+                  🎯 <strong>Pelacakan real-time</strong> pengguna KAI Pandu di stasiun
                 </p>
               </div>
               <div className="bg-white/20 backdrop-blur-sm rounded-xl p-3">
                 <p className="text-white text-sm">
-                  🚨 <strong>Instant alert</strong> when user requests assistance
+                  🚨 <strong>Peringatan instan</strong> saat pengguna meminta bantuan
                 </p>
               </div>
               <div className="bg-white/20 backdrop-blur-sm rounded-xl p-3">
                 <p className="text-white text-sm">
-                  📊 <strong>Crowd heatmap</strong> for safer route guidance
+                  📊 <strong>Peta kepadatan</strong> untuk panduan rute yang lebih aman
                 </p>
               </div>
             </div>
@@ -225,24 +225,24 @@ export default function KaiPandu() {
           {/* Impact Section */}
           <div className="bg-white rounded-3xl p-6 mb-6 shadow-xl">
             <h3 className="text-gray-900 text-xl font-bold mb-4 flex items-center gap-2">
-              <span>🎯</span> Impact
+              <span>🎯</span> Dampak
             </h3>
             
             <div className="grid grid-cols-2 gap-4">
               <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-4 text-center">
-                <div className="text-3xl font-bold text-blue-600 mb-1">±4M</div>
-                <div className="text-xs text-gray-600">Visually Impaired in Indonesia</div>
+                <div className="text-3xl font-bold text-blue-600 mb-1">±4 Juta</div>
+                <div className="text-xs text-gray-600">Tunanetra di Indonesia</div>
               </div>
               <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-4 text-center">
                 <div className="text-3xl font-bold text-green-600 mb-1">100%</div>
-                <div className="text-xs text-gray-600">Independent Travel</div>
+                <div className="text-xs text-gray-600">Perjalanan Mandiri</div>
               </div>
             </div>
 
             <div className="mt-4 p-4 bg-gradient-to-r from-purple-50 to-pink-50 rounded-2xl">
               <p className="text-gray-700 text-sm text-center">
-                <strong>Access = Accessibility</strong><br/>
-                Making train travel truly inclusive for everyone
+                <strong>Akses = Aksesibilitas</strong><br/>
+                Mewujudkan perjalanan kereta yang benar-benar inklusif untuk semua
               </p>
             </div>
           </div>
@@ -250,7 +250,7 @@ export default function KaiPandu() {
           {/* Benchmark */}
           <div className="bg-gradient-to-r from-gray-800 to-gray-900 rounded-3xl p-6 shadow-xl">
             <h3 className="text-white text-lg font-bold mb-3 flex items-center gap-2">
-              <span>🌍</span> Global Benchmark
+              <span>🌍</span> Standar Global
             </h3>
             <div className="space-y-3">
               <div className="flex items-start gap-3">
@@ -263,8 +263,8 @@ export default function KaiPandu() {
               <div className="flex items-start gap-3">
                 <span className="text-2xl">🇮🇩</span>
                 <div>
-                  <p className="text-white font-semibold text-sm">KAI Face Recognition</p>
-                  <p className="text-gray-400 text-xs">Already proven AI integration in boarding</p>
+                  <p className="text-white font-semibold text-sm">Face Recognition KAI</p>
+                  <p className="text-gray-400 text-xs">Integrasi AI sudah terbukti dalam boarding</p>
                 </div>
               </div>
             </div>
@@ -279,10 +279,10 @@ export default function KaiPandu() {
               <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/>
               <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/>
             </svg>
-            <span className="text-lg">Activate KAI Pandu</span>
+            <span className="text-lg">Aktifkan KAI Pandu</span>
           </button>
           <p className="text-center text-gray-600 text-xs mt-3">
-            Available in Beta • Voice commands in Bahasa Indonesia
+            Tersedia dalam versi Beta • Perintah suara dalam Bahasa Indonesia
           </p>
         </div>
 

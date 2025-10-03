@@ -22,58 +22,40 @@ export function Conversation({ onTranscriptUpdate, onNavigate, autoStart = false
     clientTools: {
       // Tool untuk navigasi halaman
       navigateToPage: ({ path }: { path: string }) => {
-        console.log('� NAVIGATETEPAGE CALLED! Path:', path);
+        console.log('🔄 NAVIGATETEPAGE CALLED! Path:', path);
         console.log('🔍 Current location:', window.location.href);
-        console.log('🔍 Router object exists:', !!router);
-        
-        // Force console to show
-        alert(`🔄 Agent requesting navigation to: ${path}`);
         
         // Immediate feedback to user
         let pageName = '';
-        let viewName = '';
+        let targetUrl = '';
         
-        if (path.includes('ticket')) {
+        if (path.includes('ticket') || path === 'ticket') {
           pageName = 'pemesanan tiket';
-          viewName = 'ticket-booking';
-        } else if (path.includes('navigation')) {
+          targetUrl = '/pandu-app/tiket';
+        } else if (path.includes('navigation') || path === 'navigation') {
           pageName = 'navigasi stasiun';
-          viewName = 'navigation';
-        } else if (path.includes('help')) {
+          targetUrl = '/pandu-app/navigasi';
+        } else if (path.includes('help') || path === 'help') {
           pageName = 'bantuan';
-          viewName = 'help';
+          targetUrl = '/pandu-app/bantuan';
         } else {
-          pageName = path;
-          viewName = 'landing';
+          pageName = 'beranda';
+          targetUrl = '/pandu-app';
         }
         
-        console.log('📍 Page name determined:', pageName);
-        console.log('📍 View name determined:', viewName);
+        console.log('📍 Target URL:', targetUrl);
         
-        // Update transcript immediately
+        // Update transcript
         if (onTranscriptUpdate) {
-          console.log('📝 Updating transcript...');
           onTranscriptUpdate('System', `✅ Membuka halaman ${pageName}...`);
-        } else {
-          console.log('⚠️ onTranscriptUpdate not available');
         }
         
         try {
-          console.log('🚀 Attempting navigation...');
-          
-          // Call callback first (this changes the view)
-          if (onNavigate) {
-            console.log('� Calling onNavigate callback...');
-            onNavigate(path);
-          } else {
-            console.log('⚠️ onNavigate callback not available');
-          }
-          
-          console.log('✅ Navigation completed');
-          
+          // Navigate using Next.js router to new tiket route
+          router.push(targetUrl);
+          console.log('✅ Navigation completed to:', targetUrl);
         } catch (error) {
           console.error('❌ Navigation error:', error);
-          alert(`❌ Navigation error: ${error}`);
         }
         
         return `Halaman ${pageName} berhasil dibuka. Silakan gunakan fitur yang tersedia.`;
@@ -126,9 +108,23 @@ Silakan pilih menu yang Anda inginkan.`;
 📅 Tanggal: ${date}
 👥 Penumpang: ${passenger} orang
 
-Pemesanan Anda sedang diproses...`;
+Membuka halaman pemesanan tiket...`;
         
         console.log('🎫 Ticket booking confirmed:', { from, to, date, passenger });
+        
+        // Update form with booking data
+        const bookingData = { from, to, date, passenger };
+        
+        // Dispatch custom event to update booking form
+        const event = new CustomEvent('updateBookingData', { 
+          detail: bookingData 
+        });
+        window.dispatchEvent(event);
+        
+        // Navigate to new tiket page with query params
+        const ticketUrl = `/pandu-app/tiket?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}&date=${encodeURIComponent(date)}`;
+        console.log('🚀 Navigating to tiket page:', ticketUrl);
+        router.push(ticketUrl);
         
         if (onTranscriptUpdate) {
           onTranscriptUpdate('KAI Pandu', confirmation);
