@@ -12,6 +12,15 @@
   --font-mono: var(--font-geist-mono);
 }
 
+.kai-app-background {
+  background: linear-gradient(
+    to bottom,
+    #5c00a3 0%,   /* Dark Purple/Indigo */
+    #a800d7 45%,  /* Lighter Purple/Magenta */
+    #3b009e 100%  /* Dark Blue/Purple */
+  );
+}
+
 body {
   background: var(--background);
   color: var(--foreground);

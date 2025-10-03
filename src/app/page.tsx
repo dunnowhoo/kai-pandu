@@ -1,41 +1,49 @@
+const KAI_BACKGROUND_IMAGE = '/images/KAI_bg1.png';
+
 export default function Home() {
   return (
     <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-      <div className="w-full max-w-[430px] min-h-screen bg-gradient-to-br from-purple-600 via-purple-500 to-teal-400 relative overflow-hidden shadow-2xl">
+      <div className="w-full max-w-[430px] min-h-screen bg-white relative overflow-hidden shadow-2xl">
         {/* Background Decoration */}
-        <div className="absolute top-0 left-0 w-full h-48 bg-gradient-to-b from-purple-700/30 to-transparent"></div>
-      
-      {/* Header */}
-      <header className="relative z-10 px-6 pt-6 pb-4">
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-white text-sm opacity-90">Good Night</p>
-            <h1 className="text-white text-xl font-bold">FAUZAN</h1>
-          </div>
-          <div className="flex items-center gap-3">
-            <button className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center">
-              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-              </svg>
-            </button>
-            <button className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center">
-              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-              </svg>
-            </button>
-            <button className="px-4 h-12 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center gap-2">
-              <span className="text-2xl">🇺🇸</span>
-              <span className="text-white font-semibold">EN</span>
-              <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-              </svg>
-            </button>
-          </div>
+        <div 
+          className="relative w-full h-64 bg-cover bg-center" 
+          style={{ backgroundImage: `url(${KAI_BACKGROUND_IMAGE})` }}
+        >
+          {/* Gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/10"></div>
+          {/* Move header inside and absolutely position it */}
+          <header className="absolute top-0 left-0 w-full z-10 px-6 pt-6 pb-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-white text-sm opacity-90">Good Night</p>
+                <h1 className="text-white text-xl font-bold">FAUZAN</h1>
+              </div>
+              <div className="flex items-center gap-3">
+                <button className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center">
+                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                  </svg>
+                </button>
+                <button className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center">
+                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                </button>
+                <button className="px-4 h-12 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center gap-2">
+                  <span className="text-2xl">🇺🇸</span>
+                  <span className="text-white font-semibold">EN</span>
+                  <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </header>
         </div>
-      </header>
 
-      {/* Main Content */}
-      <main className="relative z-10 px-4 pb-24">
+      
+      {/* Main Content: Moved this content wrapper outside the header and gave it a strong background color */}
+      <main className="relative z-20 -mt-24 px-4 pb-24 **bg-gray-900**"> 
         {/* KAI Pay Card */}
         <div className="bg-white rounded-3xl shadow-xl p-6 mb-4">
           <div className="flex items-center justify-between mb-6">
@@ -106,7 +114,8 @@ export default function Home() {
                 <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z"/>
               </svg>
             </div>
-            <span className="text-xs font-semibold text-white text-center">Inter City</span>
+            {/* Changed from text-white to text-gray-300 for better contrast on dark background */}
+            <span className="text-xs font-semibold **text-gray-300** text-center">Inter City</span>
           </button>
           <button className="flex flex-col items-center gap-3 min-w-[90px]">
             <div className="w-20 h-20 bg-gradient-to-br from-orange-500 to-orange-600 rounded-full flex items-center justify-center shadow-lg">
@@ -114,7 +123,8 @@ export default function Home() {
                 <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z"/>
               </svg>
             </div>
-            <span className="text-xs font-semibold text-white text-center">Local</span>
+            {/* Changed from text-white to text-gray-300 for better contrast on dark background */}
+            <span className="text-xs font-semibold **text-gray-300** text-center">Local</span>
           </button>
           <button className="flex flex-col items-center gap-3 min-w-[90px]">
             <div className="w-20 h-20 bg-gradient-to-br from-red-600 to-red-700 rounded-full flex items-center justify-center shadow-lg">
@@ -122,7 +132,8 @@ export default function Home() {
                 <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z"/>
               </svg>
             </div>
-            <span className="text-xs font-semibold text-white text-center">Commuter Line</span>
+            {/* Changed from text-white to text-gray-300 for better contrast on dark background */}
+            <span className="text-xs font-semibold **text-gray-300** text-center">Commuter Line</span>
           </button>
           <button className="flex flex-col items-center gap-3 min-w-[90px]">
             <div className="w-20 h-20 bg-gradient-to-br from-purple-600 to-purple-700 rounded-full flex items-center justify-center shadow-lg">
@@ -130,7 +141,8 @@ export default function Home() {
                 <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z"/>
               </svg>
             </div>
-            <span className="text-xs font-semibold text-white text-center">LRT</span>
+            {/* Changed from text-white to text-gray-300 for better contrast on dark background */}
+            <span className="text-xs font-semibold **text-gray-300** text-center">LRT</span>
           </button>
           <button className="flex flex-col items-center gap-3 min-w-[90px]">
             <div className="w-20 h-20 bg-gradient-to-br from-cyan-400 to-cyan-500 rounded-full flex items-center justify-center shadow-lg">
@@ -138,7 +150,8 @@ export default function Home() {
                 <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/>
               </svg>
             </div>
-            <span className="text-xs font-semibold text-white text-center">Airport</span>
+            {/* Changed from text-white to text-gray-300 for better contrast on dark background */}
+            <span className="text-xs font-semibold **text-gray-300** text-center">Airport</span>
           </button>
         </div>
 
@@ -150,7 +163,8 @@ export default function Home() {
                 <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zM6 20V4h7v5h5v11H6z"/>
               </svg>
             </div>
-            <span className="text-xs font-medium text-white text-center">Hotel</span>
+            {/* Changed from text-white to text-gray-300 for better contrast on dark background */}
+            <span className="text-xs font-medium **text-gray-300** text-center">Hotel</span>
           </button>
           <button className="flex flex-col items-center gap-2">
             <div className="w-16 h-16 bg-white/90 backdrop-blur-md rounded-2xl flex items-center justify-center shadow-md">
@@ -158,7 +172,8 @@ export default function Home() {
                 <path d="M20 6h-2.18c.11-.31.18-.65.18-1a2.996 2.996 0 00-5.5-1.65l-.5.67-.5-.68C10.96 2.54 10.05 2 9 2 7.34 2 6 3.34 6 5c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-5-2c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM9 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm11 15H4v-2h16v2zm0-5H4V8h5.08L7 10.83 8.62 12 11 8.76l1-1.36 1 1.36L15.38 12 17 10.83 14.92 8H20v6z"/>
               </svg>
             </div>
-            <span className="text-xs font-medium text-white text-center">Kartu Multi Trip</span>
+            {/* Changed from text-white to text-gray-300 for better contrast on dark background */}
+            <span className="text-xs font-medium **text-gray-300** text-center">Kartu Multi Trip</span>
           </button>
           <button className="flex flex-col items-center gap-2">
             <div className="w-16 h-16 bg-white/90 backdrop-blur-md rounded-2xl flex items-center justify-center shadow-md">
@@ -166,7 +181,8 @@ export default function Home() {
                 <path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9l1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
               </svg>
             </div>
-            <span className="text-xs font-medium text-white text-center">KAI Logistics</span>
+            {/* Changed from text-white to text-gray-300 for better contrast on dark background */}
+            <span className="text-xs font-medium **text-gray-300** text-center">KAI Logistics</span>
           </button>
           <button className="flex flex-col items-center gap-2">
             <div className="w-16 h-16 bg-white/90 backdrop-blur-md rounded-2xl flex items-center justify-center shadow-md">
@@ -174,29 +190,12 @@ export default function Home() {
                 <path d="M4 8h4V4H4v4zm6 12h4v-4h-4v4zm-6 0h4v-4H4v4zm0-6h4v-4H4v4zm6 0h4v-4h-4v4zm6-10v4h4V4h-4zm-6 4h4V4h-4v4zm6 6h4v-4h-4v4zm0 6h4v-4h-4v4z"/>
               </svg>
             </div>
-            <span className="text-xs font-medium text-white text-center">Show more</span>
+            {/* Changed from text-white to text-gray-300 for better contrast on dark background */}
+            <span className="text-xs font-medium **text-gray-300** text-center">Show more</span>
           </button>
         </div>
 
-        {/* Trip Planner */}
-        <div className="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-3xl p-6 mb-6 shadow-xl flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <div className="w-16 h-16 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center">
-              <svg className="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-              </svg>
-            </div>
-            <div>
-              <h3 className="text-white text-xl font-bold">TRIP Planner</h3>
-              <p className="text-white/80 text-sm">Make the best plans for your trip.</p>
-            </div>
-          </div>
-          <button className="bg-white rounded-2xl px-6 py-3 font-bold text-blue-600 shadow-md">
-            CREATE
-          </button>
-        </div>
-
-        {/* KAI Pandu Feature Banner - NEW */}
+{/* KAI Pandu Feature Banner - NEW */}
         <a href="/pandu-app" className="block mb-6">
           <div className="bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-600 rounded-3xl p-6 shadow-xl relative overflow-hidden group hover:scale-[1.02] transition-transform">
             {/* Animated Background Effect */}
@@ -234,6 +233,26 @@ export default function Home() {
           </div>
         </a>
 
+        {/* Trip Planner */}
+        <div className="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-3xl p-6 mb-6 shadow-xl flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <div className="w-16 h-16 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center">
+              <svg className="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+              </svg>
+            </div>
+            <div>
+              <h3 className="text-white text-xl font-bold">TRIP Planner</h3>
+              <p className="text-white/80 text-sm">Make the best plans for your trip.</p>
+            </div>
+          </div>
+          <button className="bg-white rounded-2xl px-6 py-3 font-bold text-blue-600 shadow-md">
+            CREATE
+          </button>
+        </div>
+
+        
+
         {/* Info Banner */}
         <a href="/kai-pandu" className="block mb-6">
           <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/20 hover:bg-white/20 transition-colors">
@@ -264,6 +283,7 @@ export default function Home() {
             <p className="text-white text-3xl font-bold mb-2">50.000</p>
             <p className="text-white/80 text-xs">Dengan menunjukan</p>
           </div>
+          {/* Note: The next promo card uses black/blue text on a white background, which is already visible. */}
           <div className="min-w-[280px] bg-white rounded-3xl p-6 shadow-xl">
             <h3 className="text-gray-800 text-sm mb-2">Kartu Kredit</h3>
             <p className="text-blue-600 text-3xl font-bold mb-2">10%</p>
