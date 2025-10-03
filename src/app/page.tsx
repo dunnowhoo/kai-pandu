@@ -196,6 +196,60 @@ export default function Home() {
           </button>
         </div>
 
+        {/* KAI Pandu Feature Banner - NEW */}
+        <a href="/pandu-app" className="block mb-6">
+          <div className="bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-600 rounded-3xl p-6 shadow-xl relative overflow-hidden group hover:scale-[1.02] transition-transform">
+            {/* Animated Background Effect */}
+            <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 transform -skew-x-12 group-hover:translate-x-full transition-transform duration-1000"></div>
+            
+            <div className="relative">
+              <div className="flex items-start justify-between mb-3">
+                <div className="flex items-center gap-2">
+                  <span className="text-2xl">🌟</span>
+                  <span className="bg-yellow-400 text-gray-900 text-xs font-bold px-3 py-1 rounded-full">AKTIFKAN</span>
+                </div>
+                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </div>
+              
+              <h3 className="text-white text-2xl font-bold mb-2">Mode KAI Pandu</h3>
+              <p className="text-white/90 text-sm mb-4">
+                🎤 Voice Assistant • 🗺️ Navigasi AR • 🚨 Bantuan Darurat
+              </p>
+              
+              <div className="bg-white/20 backdrop-blur-sm rounded-xl p-3 flex items-center gap-3">
+                <div className="w-10 h-10 bg-white/30 rounded-lg flex items-center justify-center">
+                  <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/>
+                    <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/>
+                  </svg>
+                </div>
+                <div>
+                  <p className="text-white text-sm font-bold">Tap untuk mengaktifkan</p>
+                  <p className="text-white/80 text-xs">Asisten perjalanan dengan AI</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </a>
+
+        {/* Info Banner */}
+        <a href="/kai-pandu" className="block mb-6">
+          <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/20 hover:bg-white/20 transition-colors">
+            <div className="flex items-center gap-3">
+              <span className="text-2xl">ℹ️</span>
+              <div className="flex-1">
+                <p className="text-white text-sm font-semibold">Pelajari tentang KAI Pandu</p>
+                <p className="text-white/70 text-xs">Fitur aksesibilitas untuk semua</p>
+              </div>
+              <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </div>
+          </div>
+        </a>
+
         {/* Latest Promo */}
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-white text-2xl font-bold">Latest Promo</h2>
