@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { Train, Plane } from 'lucide-react';
 
 const KAI_BACKGROUND_IMAGE = '/images/KAI_bg1.png';
 
@@ -119,48 +120,38 @@ export default function Home() {
         <div className="flex gap-3 mb-6 overflow-x-auto pb-2">
           <button className="flex flex-col items-center gap-3 min-w-[90px]">
             <div className="w-20 h-20 bg-gradient-to-br from-blue-600 to-blue-700 rounded-full flex items-center justify-center shadow-lg">
-              <svg className="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z"/>
-              </svg>
+              <Train className="w-10 h-10 text-white" />
             </div>
             {/* Changed from text-white to text-gray-300 for better contrast on dark background */}
             <span className="text-xs font-semibold **text-gray-300** text-center">Inter City</span>
           </button>
           <button className="flex flex-col items-center gap-3 min-w-[90px]">
             <div className="w-20 h-20 bg-gradient-to-br from-orange-500 to-orange-600 rounded-full flex items-center justify-center shadow-lg">
-              <svg className="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z"/>
-              </svg>
+              <Train className="w-10 h-10 text-white" />
             </div>
             {/* Changed from text-white to text-gray-300 for better contrast on dark background */}
             <span className="text-xs font-semibold **text-gray-300** text-center">Local</span>
           </button>
           <button className="flex flex-col items-center gap-3 min-w-[90px]">
             <div className="w-20 h-20 bg-gradient-to-br from-red-600 to-red-700 rounded-full flex items-center justify-center shadow-lg">
-              <svg className="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z"/>
-              </svg>
+              <Train className="w-10 h-10 text-white" />
             </div>
             {/* Changed from text-white to text-gray-300 for better contrast on dark background */}
             <span className="text-xs font-semibold **text-gray-300** text-center">Commuter Line</span>
           </button>
           <button className="flex flex-col items-center gap-3 min-w-[90px]">
             <div className="w-20 h-20 bg-gradient-to-br from-purple-600 to-purple-700 rounded-full flex items-center justify-center shadow-lg">
-              <svg className="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z"/>
-              </svg>
+              <Train className="w-10 h-10 text-white" />
             </div>
             {/* Changed from text-white to text-gray-300 for better contrast on dark background */}
             <span className="text-xs font-semibold **text-gray-300** text-center">LRT</span>
           </button>
           <button className="flex flex-col items-center gap-3 min-w-[90px]">
             <div className="w-20 h-20 bg-gradient-to-br from-cyan-400 to-cyan-500 rounded-full flex items-center justify-center shadow-lg">
-              <svg className="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/>
-              </svg>
+              <Plane className="w-10 h-10 text-white" />
             </div>
             {/* Changed from text-white to text-gray-300 for better contrast on dark background */}
-            <span className="text-xs font-semibold text-gray-300 text-center">Airport</span>
+            <span className="text-xs font-semibold **text-gray-300** text-center">Airport</span>
           </button>
           <a href="/security-dashboard" className="flex flex-col items-center gap-3 min-w-[90px]">
             <div className="w-20 h-20 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-full flex items-center justify-center shadow-lg">

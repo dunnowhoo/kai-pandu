@@ -16,16 +16,9 @@ export function Conversation({ onTranscriptUpdate, onNavigate, autoStart = false
   const [error, setError] = useState<string | null>(null);
   const [conversationId, setConversationId] = useState<string | null>(null);
 
-  // Client Tools - Fungsi yang bisa dipanggil oleh Agent
   const conversation = useConversation({
-    // Client Tools untuk navigasi halaman
     clientTools: {
-      // Tool untuk navigasi halaman
       navigateToPage: ({ path }: { path: string }) => {
-        console.log('🔄 NAVIGATETEPAGE CALLED! Path:', path);
-        console.log('🔍 Current location:', window.location.href);
-        
-        // Immediate feedback to user
         let pageName = '';
         let targetUrl = '';
         
@@ -45,13 +38,11 @@ export function Conversation({ onTranscriptUpdate, onNavigate, autoStart = false
         
         console.log('📍 Target URL:', targetUrl);
         
-        // Update transcript
         if (onTranscriptUpdate) {
           onTranscriptUpdate('System', `✅ Membuka halaman ${pageName}...`);
         }
         
         try {
-          // Navigate using Next.js router to new tiket route
           router.push(targetUrl);
           console.log('✅ Navigation completed to:', targetUrl);
         } catch (error) {
@@ -61,7 +52,6 @@ export function Conversation({ onTranscriptUpdate, onNavigate, autoStart = false
         return `Halaman ${pageName} berhasil dibuka. Silakan gunakan fitur yang tersedia.`;
       },
       
-      // Tool untuk memberikan informasi menu
       showMenuOptions: () => {
         const menuInfo = `Menu KAI Pandu:
 1. 🎫 Pesan Tiket - untuk pemesanan tiket kereta api
@@ -77,7 +67,6 @@ Silakan pilih menu yang Anda inginkan.`;
         return menuInfo;
       },
 
-      // Tool untuk meminta akses webcam
       requestWebcamAccess: async () => {
         try {
           const stream = await navigator.mediaDevices.getUserMedia({ video: true });
@@ -95,36 +84,27 @@ Silakan pilih menu yang Anda inginkan.`;
         }
       },
 
-      // Tool untuk konfirmasi pemesanan
-      confirmTicketBooking: ({ from, to, date, passenger }: { 
+      submitTicketSearch: ({ from, to, date }: { 
         from: string; 
         to: string; 
         date: string; 
-        passenger: string; 
       }) => {
-        const confirmation = `✅ Konfirmasi Pemesanan:
+        const confirmation = `✅ Memproses pencarian tiket:
 📍 Dari: ${from}
 📍 Ke: ${to}  
 📅 Tanggal: ${date}
-👥 Penumpang: ${passenger} orang
 
-Membuka halaman pemesanan tiket...`;
+Mencari jadwal kereta untuk Anda...`;
         
-        console.log('🎫 Ticket booking confirmed:', { from, to, date, passenger });
+        console.log('🔍 Submitting ticket search:', { from, to, date });
         
-        // Update form with booking data
-        const bookingData = { from, to, date, passenger };
+        // Dispatch event to fill form and trigger search
+        const searchData = { from, to, date };
         
-        // Dispatch custom event to update booking form
-        const event = new CustomEvent('updateBookingData', { 
-          detail: bookingData 
+        const event = new CustomEvent('submitTicketSearch', { 
+          detail: searchData 
         });
         window.dispatchEvent(event);
-        
-        // Navigate to new tiket page with query params
-        const ticketUrl = `/pandu-app/tiket?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}&date=${encodeURIComponent(date)}`;
-        console.log('🚀 Navigating to tiket page:', ticketUrl);
-        router.push(ticketUrl);
         
         if (onTranscriptUpdate) {
           onTranscriptUpdate('KAI Pandu', confirmation);
@@ -134,7 +114,6 @@ Membuka halaman pemesanan tiket...`;
       }
     },
 
-    // Event handlers
     onConnect: () => {
       console.log('✅ Connected to ElevenLabs agent');
       if (onTranscriptUpdate) {
@@ -153,7 +132,49 @@ Membuka halaman pemesanan tiket...`;
     onMessage: (message) => {
       console.log('💬 Message received:', message);
       
-      // Update transcript dengan pesan yang diterima
+      if (message.message && typeof message.message === 'string') {
+        const msg = message.message;
+        
+        if (msg.includes('navigateToPage') && msg.includes('print(')) {
+          console.warn('⚠️ Agent returned Python code instead of calling function!');
+          
+          let path = '';
+          if (msg.includes("path='ticket'") || msg.includes('path="ticket"')) {
+            path = 'ticket';
+          } else if (msg.includes("path='navigation'") || msg.includes('path="navigation"')) {
+            path = 'navigation';
+          } else if (msg.includes("path='help'") || msg.includes('path="help"')) {
+            path = 'help';
+          }
+          
+          if (path) {
+            console.log('🔧 Fallback: Manually calling navigateToPage with path:', path);
+            
+            let targetUrl = '';
+            let pageName = '';
+            
+            if (path === 'ticket') {
+              targetUrl = '/pandu-app/tiket';
+              pageName = 'pemesanan tiket';
+            } else if (path === 'navigation') {
+              targetUrl = '/pandu-app/navigasi';
+              pageName = 'navigasi stasiun';
+            } else if (path === 'help') {
+              targetUrl = '/pandu-app/help';
+              pageName = 'bantuan';
+            }
+            
+            if (targetUrl) {
+              if (onTranscriptUpdate) {
+                onTranscriptUpdate('System', `✅ Membuka halaman ${pageName}...`);
+              }
+              router.push(targetUrl);
+            }
+            return;
+          }
+        }
+      }
+      
       if (onTranscriptUpdate && message.message) {
         const speaker = message.source === 'ai' ? 'KAI Pandu' : 'Anda';
         onTranscriptUpdate(speaker, message.message);
@@ -173,10 +194,8 @@ Membuka halaman pemesanan tiket...`;
     }
   });
 
-  // Request microphone permission
   const requestMicrophonePermission = useCallback(async () => {
     try {
-      // Request both audio and video for WebRTC
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
       setIsPermissionGranted(true);
       setError(null);
@@ -190,12 +209,10 @@ Membuka halaman pemesanan tiket...`;
     }
   }, []);
 
-  // Start conversation
   const startConversation = useCallback(async () => {
     try {
       setError(null);
       
-      // Request microphone permission first
       const hasPermission = await requestMicrophonePermission();
       if (!hasPermission) {
         return;
@@ -203,10 +220,9 @@ Membuka halaman pemesanan tiket...`;
 
       console.log('🎤 Starting conversation with agent...');
       
-      // Start session with agent
       const sessionId = await conversation.startSession({
         agentId: process.env.NEXT_PUBLIC_ELEVENLABS_AGENT_ID!,
-        connectionType: 'webrtc', // Better for real-time voice
+        connectionType: 'webrtc', 
       });
 
       setConversationId(sessionId);
@@ -226,7 +242,6 @@ Membuka halaman pemesanan tiket...`;
     }
   }, [conversation, requestMicrophonePermission, onTranscriptUpdate]);
 
-  // Stop conversation
   const stopConversation = useCallback(async () => {
     try {
       await conversation.endSession();
@@ -242,16 +257,16 @@ Membuka halaman pemesanan tiket...`;
     }
   }, [conversation, onTranscriptUpdate]);
 
-  // Auto-start conversation if requested
   useEffect(() => {
-    if (autoStart && !conversationId && !error) {
+    if (autoStart && !conversationId && !error && isPermissionGranted) {
+      console.log('🚀 Auto-starting conversation...');
       const timer = setTimeout(() => {
         startConversation();
-      }, 1000); // Delay 1 detik untuk auto-start
+      }, 500); 
       
       return () => clearTimeout(timer);
     }
-  }, [autoStart, conversationId, error, startConversation]);
+  }, [autoStart, conversationId, error, isPermissionGranted, startConversation]);
 
   return (
     <div className="space-y-4">
@@ -300,7 +315,7 @@ Membuka halaman pemesanan tiket...`;
             className={`px-6 py-3 rounded-lg font-medium transition-colors ${
               conversation.status === 'connected'
                 ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                : 'bg-green-600 text-white hover:bg-green-700'
+                : 'bg-gradient-to-br from-purple-500 to-pink-500 text-white hover:from-purple-600 hover:to-pink-600'
             }`}
           >
             {conversation.status === 'connected' ? 'Terhubung' : 'Mulai KAI Pandu'}

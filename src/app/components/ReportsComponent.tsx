@@ -39,7 +39,6 @@ export function ReportsComponent({ requests, securityOfficers }: ReportsComponen
   const [selectedTimeframe, setSelectedTimeframe] = useState('today');
 
   useEffect(() => {
-    // Calculate report data
     const completed = requests.filter(r => r.status === 'completed');
     
     const disabilityBreakdown = {
@@ -62,14 +61,14 @@ export function ReportsComponent({ requests, securityOfficers }: ReportsComponen
       id: officer.id,
       name: officer.name,
       completedTasks: completed.filter(r => r.securityId === officer.id).length,
-      averageTime: Math.floor(Math.random() * 15) + 5, // Mock data
-      rating: 4.2 + Math.random() * 0.8 // Mock rating
+      averageTime: Math.floor(Math.random() * 15) + 5, 
+      rating: 4.2 + Math.random() * 0.8 
     }));
 
     setReportData({
       totalRequests: requests.length,
       completedRequests: completed.length,
-      averageResponseTime: 8.5, // Mock data
+      averageResponseTime: 8.5,
       disabilityBreakdown,
       priorityBreakdown,
       securityPerformance

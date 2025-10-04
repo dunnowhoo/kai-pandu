@@ -14,6 +14,7 @@ export default function TiketPage() {
   const [selectedDate, setSelectedDate] = useState('');
   const [isRoundTrip, setIsRoundTrip] = useState(false);
   const [showResults, setShowResults] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Load data from URL parameters when component mounts
   useEffect(() => {
@@ -28,29 +29,140 @@ export default function TiketPage() {
 
   // Listen for custom events from voice assistant
   useEffect(() => {
-    const handleBookingData = (event: any) => {
-      console.log('📝 Received booking data:', event.detail);
-      const { from, to, date, trainType } = event.detail;
+    const handleTicketSearch = async (event: any) => {
+      console.log('� Received ticket search data:', event.detail);
+      const { from, to, date } = event.detail;
       
+      // Fill the form
       if (from) setSelectedOrigin(from);
       if (to) setSelectedDestination(to);
       if (date) setSelectedDate(date);
+      
+      // Wait a bit for state to update, then trigger search
+      setTimeout(() => {
+        handleFindSchedule(from, to, date);
+      }, 500);
     };
 
-    window.addEventListener('updateBookingData', handleBookingData);
+    window.addEventListener('submitTicketSearch', handleTicketSearch);
     
     return () => {
-      window.removeEventListener('updateBookingData', handleBookingData);
+      window.removeEventListener('submitTicketSearch', handleTicketSearch);
     };
   }, []);
 
-  const handleFindSchedule = () => {
-    if (selectedOrigin && selectedDestination && selectedDate) {
-      setShowResults(true);
-      console.log('🔍 Searching for:', { selectedOrigin, selectedDestination, selectedDate });
-    } else {
-      alert('Mohon lengkapi data keberangkatan, tujuan, dan tanggal');
+  const handleFindSchedule = async (origin?: string, destination?: string, searchDate?: string) => {
+    // Use provided params or fall back to state
+    const useOrigin = origin || selectedOrigin;
+    const useDestination = destination || selectedDestination;
+    const useDate = searchDate || selectedDate;
+    
+    // Validation
+    if (!useOrigin || !useDestination || !useDate) {
+      alert('Mohon lengkapi semua data pemesanan');
+      return;
     }
+    
+    setIsLoading(true);
+
+    // Random data arrays for train details
+    const trainNames = [
+      'ARGO BROMO ANGGREK',
+      'ARGO LAWU',
+      'BIMA',
+      'GAJAYANA',
+      'TURANGGA',
+      'HARINA',
+      'TAKSAKA',
+      'ARGO PARAHYANGAN',
+      'LODAYA',
+      'MUTIARA SELATAN'
+    ];
+    const classes = ['Eksekutif', 'Bisnis', 'Ekonomi Premium'];
+    
+    const randomTrainName = trainNames[Math.floor(Math.random() * trainNames.length)];
+    const randomClass = classes[Math.floor(Math.random() * classes.length)];
+    
+    // Random times
+    const departureHour = Math.floor(Math.random() * 18) + 5; // 05:00 - 22:00
+    const departureMinute = Math.random() < 0.5 ? '00' : '30';
+    const departureTime = `${departureHour.toString().padStart(2, '0')}:${departureMinute}`;
+    
+    // Random journey duration (3-10 hours)
+    const journeyHours = Math.floor(Math.random() * 8) + 3;
+    const arrivalHour = (departureHour + journeyHours) % 24;
+    const arrivalMinute = Math.random() < 0.5 ? '00' : '30';
+    const arrivalTime = `${arrivalHour.toString().padStart(2, '0')}:${arrivalMinute}`;
+    
+    // Random price based on class
+    let basePrice = 150000;
+    if (randomClass === 'Eksekutif') {
+      basePrice = Math.floor(Math.random() * 200000) + 300000; // 300k - 500k
+    } else if (randomClass === 'Bisnis') {
+      basePrice = Math.floor(Math.random() * 100000) + 200000; // 200k - 300k
+    } else {
+      basePrice = Math.floor(Math.random() * 80000) + 100000; // 100k - 180k
+    }
+    const randomPrice = `Rp ${basePrice.toLocaleString('id-ID')}`;
+    
+    // Random train number
+    const randomTrainNumber = `No Train ${Math.floor(Math.random() * 500) + 100}`;
+    
+    // Show loading
+    setIsLoading(true);
+    
+    console.log('🔍 Searching ticket with data:', { useOrigin, useDestination, useDate });
+    
+    // Simulate API call with 2 second delay
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    
+    // Generate order code
+    const orderCode = 'RVG' + Math.random().toString(36).substring(2, 7).toUpperCase();
+    
+    const formatDate = (dateStr: string) => {
+      const date = new Date(dateStr);
+      const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+      const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+      
+      return `${days[date.getDay()]} ${date.getDate().toString().padStart(2, '0')} ${months[date.getMonth()]} ${date.getFullYear()}`;
+    };
+    
+    const dummyTicket = {
+      orderCode,
+      trainName: randomTrainName,
+      class: randomClass,
+      trainNumber: randomTrainNumber,
+      category: 'intercity',
+      departure: {
+        time: departureTime,
+        station: `${useOrigin.toUpperCase()} (${useOrigin.substring(0, 3).toUpperCase()})`,
+        date: formatDate(useDate)
+      },
+      arrival: {
+        time: arrivalTime,
+        station: `${useDestination.toUpperCase()} (${useDestination.substring(0, 3).toUpperCase()})`,
+        date: formatDate(useDate)
+      },
+      price: randomPrice,
+      purchaseDate: new Date().toISOString()
+    };
+    
+    // Get existing tickets from localStorage
+    const existingTickets = JSON.parse(localStorage.getItem('kai_tickets') || '[]');
+    
+    // Add dummy ticket
+    existingTickets.push(dummyTicket);
+    
+    // Save to localStorage
+    localStorage.setItem('kai_tickets', JSON.stringify(existingTickets));
+    
+    console.log('✅ Random ticket created:', dummyTicket);
+    
+    // Hide loading
+    setIsLoading(false);
+    
+    // Redirect to My Ticket page
+    router.push('/my-ticket');
   };
 
   const handleSwapStations = () => {
@@ -118,6 +230,34 @@ export default function TiketPage() {
   return (
     <div className="min-h-screen bg-gray-900 flex items-center justify-center">
       <div className="w-full max-w-[430px] min-h-screen bg-white relative overflow-hidden shadow-2xl flex flex-col">
+        
+        {/* Loading Overlay */}
+        {isLoading && (
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center">
+            <div className="bg-white rounded-3xl p-8 shadow-2xl flex flex-col items-center max-w-sm mx-4">
+              <div className="relative w-24 h-24 mb-6">
+                <svg className="animate-spin w-24 h-24 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <svg className="w-12 h-12 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 2c-4 0-8 .5-8 4v9.5C4 17.43 5.57 19 7.5 19L6 20.5v.5h2l2-2h4l2 2h2v-.5L16.5 19c1.93 0 3.5-1.57 3.5-3.5V6c0-3.5-4-4-8-4z"/>
+                  </svg>
+                </div>
+              </div>
+              <h3 className="text-xl font-bold text-gray-800 mb-2">Memproses Pemesanan</h3>
+              <p className="text-gray-600 text-center text-sm mb-4">
+                Sedang mencari jadwal kereta terbaik untuk Anda...
+              </p>
+              <div className="flex gap-2">
+                <div className="w-2 h-2 bg-blue-600 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+                <div className="w-2 h-2 bg-blue-600 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+                <div className="w-2 h-2 bg-blue-600 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+              </div>
+            </div>
+          </div>
+        )}
         
         {/* Header with gradient background */}
         <div className="bg-gradient-to-r from-purple-600 to-pink-500 pt-12 pb-20 px-4 rounded-b-[40px]">
@@ -247,10 +387,25 @@ export default function TiketPage() {
 
           {/* Find Schedule Button */}
           <button
-            onClick={handleFindSchedule}
-            className="w-full bg-blue-600 text-white py-4 px-6 rounded-3xl font-bold text-base shadow-lg hover:bg-blue-700 transition-all duration-300"
+            onClick={() => handleFindSchedule()}
+            disabled={isLoading}
+            className={`w-full py-4 px-6 rounded-3xl font-bold text-base shadow-lg transition-all duration-300 ${
+              isLoading 
+                ? 'bg-gray-400 cursor-not-allowed' 
+                : 'bg-blue-600 hover:bg-blue-700 text-white'
+            }`}
           >
-            Find Schedule
+            {isLoading ? (
+              <div className="flex items-center justify-center gap-3">
+                <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <span>Processing...</span>
+              </div>
+            ) : (
+              'Find Schedule'
+            )}
           </button>
 
           {/* Ads Banner - Below button */}

@@ -12,6 +12,7 @@
     "@elevenlabs/elevenlabs-js": "^2.17.0",
     "@elevenlabs/react": "^0.7.1",
     "express": "^5.1.0",
+    "lucide-react": "^0.544.0",
     "next": "15.5.4",
     "react": "19.1.0",
     "react-dom": "19.1.0"

@@ -32,7 +32,6 @@ export default function MyTicketPage() {
   const [activeCategory, setActiveCategory] = useState<TicketCategory>('all');
   const [tickets, setTickets] = useState<Ticket[]>([]);
 
-  // Load tickets from localStorage
   useEffect(() => {
     const loadTickets = () => {
       try {
@@ -48,15 +47,12 @@ export default function MyTicketPage() {
     };
 
     loadTickets();
-
-    // Listen for storage changes (if tickets are added from another tab/component)
     const handleStorageChange = () => {
       loadTickets();
     };
 
     window.addEventListener('storage', handleStorageChange);
     
-    // Custom event for same-page updates
     window.addEventListener('ticketsUpdated', handleStorageChange);
 
     return () => {
@@ -71,14 +67,12 @@ export default function MyTicketPage() {
 
   const hasTickets = tickets.length > 0;
 
-  // Function to delete a ticket
   const handleDeleteTicket = (orderCode: string) => {
     if (confirm('Apakah Anda yakin ingin menghapus tiket ini?')) {
       const updatedTickets = tickets.filter(ticket => ticket.orderCode !== orderCode);
       setTickets(updatedTickets);
       localStorage.setItem('kai_tickets', JSON.stringify(updatedTickets));
       
-      // Dispatch custom event to notify other components
       window.dispatchEvent(new Event('ticketsUpdated'));
       
       console.log('🗑️ Ticket deleted:', orderCode);
