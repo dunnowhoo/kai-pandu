@@ -50,9 +50,9 @@ export default function PanduApp() {
       } else if (view === 'navigation') {
         console.log('🚀 Navigating to navigasi page');
         router.push('/pandu-app/navigasi');
-      } else if (view === 'help') {
-        console.log('🚀 Navigating to help page');
-        router.push('/pandu-app/help');
+      } else if (view === 'help' || view === 'bantuan') {
+        console.log('🚀 Navigating to bantuan page');
+        router.push('/pandu-app/bantuan');
       }
     };
     
@@ -214,8 +214,8 @@ export default function PanduApp() {
                             addToTranscript('Anda', 'Panggil petugas');
                             addToTranscript('KAI Pandu', 'Membuka bantuan darurat...');
                             
-                            // Navigate to help page
-                            router.push('/pandu-app/help');
+                            // Navigate to bantuan page
+                            router.push('/pandu-app/bantuan');
                           }}
                           className="w-full bg-gradient-to-r from-red-500 to-orange-600 text-white p-5 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300"
                         >
