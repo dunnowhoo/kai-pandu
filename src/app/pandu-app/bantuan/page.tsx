@@ -1,9 +1,64 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, Phone } from 'lucide-react';
+import { ArrowLeft, Phone, PhoneCall } from 'lucide-react';
+import { useVoiceAgent } from '../../contexts/VoiceAgentContext';
 
 export default function HelpPage() {
+  const { stopAgent, addToTranscript } = useVoiceAgent();
+  const [callInProgress, setCallInProgress] = useState(false);
+  const [callingService, setCallingService] = useState<string>('');
+
+  // Function to make direct call and stop ElevenLabs
+  const makeEmergencyCall = (service: string, phoneNumber: string) => {
+    console.log(`🚨 Making emergency call to ${service}: ${phoneNumber}`);
+    
+    // Stop ElevenLabs voice agent
+    if (stopAgent) {
+      stopAgent();
+      console.log('🔇 ElevenLabs agent stopped');
+    }
+    
+    // Add to transcript
+    if (addToTranscript) {
+      addToTranscript('System', `📞 Menghubungi ${service}...`);
+    }
+    
+    // Set call state
+    setCallInProgress(true);
+    setCallingService(service);
+    
+    // Make the actual phone call
+    window.location.href = `tel:${phoneNumber}`;
+    
+    // Reset state after 3 seconds
+    setTimeout(() => {
+      setCallInProgress(false);
+      setCallingService('');
+    }, 3000);
+  };
+
+  // Listen for voice commands to make emergency calls
+  useEffect(() => {
+    const handleEmergencyCall = (event: Event) => {
+      const customEvent = event as CustomEvent;
+      const { service, phoneNumber } = customEvent.detail || {};
+      
+      console.log('📞 Emergency call event received:', { service, phoneNumber });
+      
+      if (service && phoneNumber) {
+        makeEmergencyCall(service, phoneNumber);
+      }
+    };
+    
+    window.addEventListener('makeEmergencyCall', handleEmergencyCall);
+    
+    return () => {
+      window.removeEventListener('makeEmergencyCall', handleEmergencyCall);
+    };
+  }, [stopAgent, addToTranscript]);
+
   return (
     <div className="min-h-screen bg-gray-900 flex items-center justify-center">
       <div className="w-full max-w-[430px] min-h-screen bg-white relative overflow-hidden">
@@ -89,52 +144,93 @@ export default function HelpPage() {
           <div className="bg-gray-50 rounded-2xl p-6 mt-6">
             <h3 className="font-bold text-gray-800 mb-4 text-base">Kontak Darurat Lainnya</h3>
             <div className="space-y-3">
-              <a href="tel:119" className="flex items-center justify-between p-3 bg-white rounded-xl hover:bg-gray-100 transition-colors">
+              
+              {/* Polisi */}
+              <button 
+                onClick={() => makeEmergencyCall('Polisi', '110')}
+                className={`w-full flex items-center justify-between p-3 bg-white rounded-xl hover:bg-red-50 transition-colors ${
+                  callInProgress && callingService === 'Polisi' ? 'ring-2 ring-red-500 bg-red-50' : ''
+                }`}
+              >
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
-                    <span className="text-lg">🚨</span>
+                    {callInProgress && callingService === 'Polisi' ? (
+                      <PhoneCall className="w-5 h-5 text-red-600 animate-pulse" />
+                    ) : (
+                      <span className="text-lg">🚨</span>
+                    )}
                   </div>
-                  <div>
+                  <div className="text-left">
                     <p className="font-medium text-gray-800">Polisi</p>
-                    <p className="text-sm text-gray-600">119</p>
+                    <p className="text-sm text-gray-600">110</p>
                   </div>
                 </div>
-                <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </a>
+                <Phone className="w-5 h-5 text-red-600" />
+              </button>
               
-              <a href="tel:118" className="flex items-center justify-between p-3 bg-white rounded-xl hover:bg-gray-100 transition-colors">
+              {/* Ambulans */}
+              <button 
+                onClick={() => makeEmergencyCall('Ambulans', '118')}
+                className={`w-full flex items-center justify-between p-3 bg-white rounded-xl hover:bg-red-50 transition-colors ${
+                  callInProgress && callingService === 'Ambulans' ? 'ring-2 ring-red-500 bg-red-50' : ''
+                }`}
+              >
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
-                    <span className="text-lg">🚑</span>
+                    {callInProgress && callingService === 'Ambulans' ? (
+                      <PhoneCall className="w-5 h-5 text-red-600 animate-pulse" />
+                    ) : (
+                      <span className="text-lg">🚑</span>
+                    )}
                   </div>
-                  <div>
+                  <div className="text-left">
                     <p className="font-medium text-gray-800">Ambulans</p>
                     <p className="text-sm text-gray-600">118</p>
                   </div>
                 </div>
-                <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </a>
+                <Phone className="w-5 h-5 text-red-600" />
+              </button>
 
-              <a href="tel:+622151211521" className="flex items-center justify-between p-3 bg-white rounded-xl hover:bg-gray-100 transition-colors">
+              {/* KAI Customer Service */}
+              <button 
+                onClick={() => makeEmergencyCall('KAI Customer Service', '021-121')}
+                className={`w-full flex items-center justify-between p-3 bg-white rounded-xl hover:bg-blue-50 transition-colors ${
+                  callInProgress && callingService === 'KAI Customer Service' ? 'ring-2 ring-blue-500 bg-blue-50' : ''
+                }`}
+              >
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                    <span className="text-lg">🚄</span>
+                    {callInProgress && callingService === 'KAI Customer Service' ? (
+                      <PhoneCall className="w-5 h-5 text-blue-600 animate-pulse" />
+                    ) : (
+                      <span className="text-lg">🚄</span>
+                    )}
                   </div>
-                  <div>
+                  <div className="text-left">
                     <p className="font-medium text-gray-800">KAI Customer Service</p>
-                    <p className="text-sm text-gray-600">021-5121-1521</p>
+                    <p className="text-sm text-gray-600">021-121</p>
                   </div>
                 </div>
-                <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </a>
+                <Phone className="w-5 h-5 text-blue-600" />
+              </button>
             </div>
           </div>
+
+          {/* Calling Status Overlay */}
+          {callInProgress && (
+            <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+              <div className="bg-white rounded-3xl p-8 mx-6 max-w-sm shadow-2xl">
+                <div className="text-center">
+                  <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse">
+                    <PhoneCall className="w-10 h-10 text-green-600" />
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-800 mb-2">Menghubungi...</h3>
+                  <p className="text-lg text-gray-600 mb-1">{callingService}</p>
+                  <p className="text-sm text-gray-500">Voice assistant dimatikan</p>
+                </div>
+              </div>
+            </div>
+          )}
 
         </main>
 
