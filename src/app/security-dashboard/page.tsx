@@ -43,12 +43,9 @@ interface DashboardContentProps {
   securityOfficers: SecurityOfficer[];
   filterStatus: string;
   setFilterStatus: (status: string) => void;
-  filterPriority: string;
-  setFilterPriority: (priority: string) => void;
   filteredRequests: AssistanceRequest[];
   setSelectedRequest: (request: AssistanceRequest | null) => void;
   getStatusColor: (status: string) => string;
-  getPriorityColor: (priority: string) => string;
   setShowOfficersList: (show: boolean) => void;
 }
 
@@ -79,10 +76,8 @@ export default function SecurityDashboard() {
   const [requests, setRequests] = useState<AssistanceRequest[]>([]);
   const [securityOfficers, setSecurityOfficers] = useState<SecurityOfficer[]>([]);
   const [selectedRequest, setSelectedRequest] = useState<AssistanceRequest | null>(null);
-  const [showAddForm, setShowAddForm] = useState(false);
   const [filterStatus, setFilterStatus] = useState<string>('all');
-  const [filterPriority, setFilterPriority] = useState<string>('all');
-  const [highlightedUser, setHighlightedUser] = useState<string | null>(null);
+  const filterPriority = 'all'; // Not currently implemented in UI
   const [showOfficersList, setShowOfficersList] = useState(false);
 
   // Mock data initialization
@@ -357,12 +352,9 @@ export default function SecurityDashboard() {
                 securityOfficers={securityOfficers}
                 filterStatus={filterStatus}
                 setFilterStatus={setFilterStatus}
-                filterPriority={filterPriority}
-                setFilterPriority={setFilterPriority}
                 filteredRequests={filteredRequests}
                 setSelectedRequest={setSelectedRequest}
                 getStatusColor={getStatusColor}
-                getPriorityColor={getPriorityColor}
                 setShowOfficersList={setShowOfficersList}
               />
             )}
@@ -404,12 +396,9 @@ function DashboardContent({
   securityOfficers, 
   filterStatus, 
   setFilterStatus,
-  filterPriority,
-  setFilterPriority,
   filteredRequests,
   setSelectedRequest,
   getStatusColor,
-  getPriorityColor,
   setShowOfficersList
 }: DashboardContentProps) {
   const [highlightedUser, setHighlightedUser] = useState<string | null>(null);
