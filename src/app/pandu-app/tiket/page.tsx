@@ -1,8 +1,14 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
+
+interface TicketSearchEventDetail {
+  from: string;
+  to: string;
+  date: string;
+}
 
 export default function TiketPage() {
   const router = useRouter();
@@ -13,7 +19,7 @@ export default function TiketPage() {
   const [selectedDestination, setSelectedDestination] = useState('');
   const [selectedDate, setSelectedDate] = useState('');
   const [isRoundTrip, setIsRoundTrip] = useState(false);
-  const [showResults, setShowResults] = useState(false);
+  const showResults = false; // Feature not yet implemented
   const [isLoading, setIsLoading] = useState(false);
 
   // Load data from URL parameters when component mounts
@@ -27,31 +33,7 @@ export default function TiketPage() {
     if (date) setSelectedDate(date);
   }, [searchParams]);
 
-  // Listen for custom events from voice assistant
-  useEffect(() => {
-    const handleTicketSearch = async (event: any) => {
-      console.log('� Received ticket search data:', event.detail);
-      const { from, to, date } = event.detail;
-      
-      // Fill the form
-      if (from) setSelectedOrigin(from);
-      if (to) setSelectedDestination(to);
-      if (date) setSelectedDate(date);
-      
-      // Wait a bit for state to update, then trigger search
-      setTimeout(() => {
-        handleFindSchedule(from, to, date);
-      }, 500);
-    };
-
-    window.addEventListener('submitTicketSearch', handleTicketSearch);
-    
-    return () => {
-      window.removeEventListener('submitTicketSearch', handleTicketSearch);
-    };
-  }, []);
-
-  const handleFindSchedule = async (origin?: string, destination?: string, searchDate?: string) => {
+  const handleFindSchedule = useCallback(async (origin?: string, destination?: string, searchDate?: string) => {
     // Use provided params or fall back to state
     const useOrigin = origin || selectedOrigin;
     const useDestination = destination || selectedDestination;
@@ -163,7 +145,32 @@ export default function TiketPage() {
     
     // Redirect to My Ticket page
     router.push('/my-ticket');
-  };
+  }, [selectedOrigin, selectedDestination, selectedDate, router]);
+
+  // Listen for custom events from voice assistant
+  useEffect(() => {
+    const handleTicketSearch = async (event: Event) => {
+      const customEvent = event as CustomEvent<TicketSearchEventDetail>;
+      console.log('🎫 Received ticket search data:', customEvent.detail);
+      const { from, to, date } = customEvent.detail;
+      
+      // Fill the form
+      if (from) setSelectedOrigin(from);
+      if (to) setSelectedDestination(to);
+      if (date) setSelectedDate(date);
+      
+      // Wait a bit for state to update, then trigger search
+      setTimeout(() => {
+        handleFindSchedule(from, to, date);
+      }, 500);
+    };
+
+    window.addEventListener('submitTicketSearch', handleTicketSearch);
+    
+    return () => {
+      window.removeEventListener('submitTicketSearch', handleTicketSearch);
+    };
+  }, [handleFindSchedule]);
 
   const handleSwapStations = () => {
     const temp = selectedOrigin;

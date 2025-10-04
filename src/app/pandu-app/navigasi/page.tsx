@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import Link from 'next/link';
 
 type NavPhase = 'gate' | 'platform' | 'boarding' | 'seat' | 'arrival';
@@ -23,11 +23,10 @@ export default function NavigasiPage() {
   const [stream, setStream] = useState<MediaStream | null>(null);
   const [error, setError] = useState<string>('');
   const [facingMode, setFacingMode] = useState<'user' | 'environment'>('environment');
-  const videoRef = useState<HTMLVideoElement | null>(null);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
   
   // Location states
   const [userLocation, setUserLocation] = useState<UserLocation | null>(null);
-  const [isInStationArea, setIsInStationArea] = useState<boolean>(false);
   const [showLocationModal, setShowLocationModal] = useState<boolean>(false);
   const [nearbyStations, setNearbyStations] = useState<Station[]>([]);
   const [isLoadingLocation, setIsLoadingLocation] = useState<boolean>(true);
@@ -38,7 +37,6 @@ export default function NavigasiPage() {
   const [trainName, setTrainName] = useState('Argo Bromo Anggrek');
   const [showETA, setShowETA] = useState(false);
   const [currentStation, setCurrentStation] = useState<string | null>(null);
-  const [nextTrain, setNextTrain] = useState<string | null>(null);
 
   const walaharSchedule = [
     { trainNumber: 'KA 326', departure: '06:00', route: 'Cikarang - Purwakarta' },
@@ -95,7 +93,7 @@ export default function NavigasiPage() {
     return distance;
   };
 
-  const checkNextTrain = () => {
+  const checkNextTrain = useCallback(() => {
     const now = new Date();
     const currentHour = now.getHours();
     const currentMinute = now.getMinutes();
@@ -111,7 +109,6 @@ export default function NavigasiPage() {
         setEtaMinutes(minutesUntilDeparture);
         setTrainRoute({ from: 'Cikarang', to: 'Purwakarta' });
         setTrainName(`KA Walahar ${train.trainNumber}`);
-        setNextTrain(train.trainNumber);
         setShowETA(true);
         return true;
       }
@@ -119,7 +116,7 @@ export default function NavigasiPage() {
     
     setShowETA(false);
     return false;
-  };
+  }, [walaharSchedule]);
 
   useEffect(() => {
     const checkLocation = async () => {
@@ -163,7 +160,6 @@ export default function NavigasiPage() {
             }
           }
 
-          setIsInStationArea(isNearStation);
           setNearbyStations(stationsWithDistance.slice(0, 5)); // Top 5 nearest stations
           
           // Show modal if not in station area
@@ -191,7 +187,7 @@ export default function NavigasiPage() {
     };
 
     checkLocation();
-  }, []);
+  }, [checkNextTrain]);
 
   // ETA Countdown Timer
   useEffect(() => {
@@ -224,7 +220,7 @@ export default function NavigasiPage() {
     }, 60000); // Check every minute
 
     return () => clearInterval(scheduleChecker);
-  }, [currentStation]);
+  }, [currentStation, checkNextTrain]);
 
   // Start camera when component mounts or facingMode changes
   useEffect(() => {
@@ -251,12 +247,12 @@ export default function NavigasiPage() {
         setError('');
 
         // Attach stream to video element
-        if (videoRef[0]) {
-          videoRef[0].srcObject = mediaStream;
+        if (videoRef.current) {
+          videoRef.current.srcObject = mediaStream;
         }
-      } catch (err: any) {
+      } catch (err) {
         console.error('Error accessing camera:', err);
-        setError(err.message || 'Tidak dapat mengakses kamera');
+        setError(err instanceof Error ? err.message : 'Tidak dapat mengakses kamera');
       }
     };
 
@@ -272,8 +268,8 @@ export default function NavigasiPage() {
 
   // Update video element when stream changes
   useEffect(() => {
-    if (stream && videoRef[0]) {
-      videoRef[0].srcObject = stream;
+    if (stream && videoRef.current) {
+      videoRef.current.srcObject = stream;
     }
   }, [stream]);
 
@@ -282,13 +278,13 @@ export default function NavigasiPage() {
   };
 
   const capturePhoto = () => {
-    if (videoRef[0]) {
+    if (videoRef.current) {
       const canvas = document.createElement('canvas');
-      canvas.width = videoRef[0].videoWidth;
-      canvas.height = videoRef[0].videoHeight;
+      canvas.width = videoRef.current.videoWidth;
+      canvas.height = videoRef.current.videoHeight;
       const ctx = canvas.getContext('2d');
       if (ctx) {
-        ctx.drawImage(videoRef[0], 0, 0);
+        ctx.drawImage(videoRef.current, 0, 0);
         canvas.toBlob((blob) => {
           if (blob) {
             const url = URL.createObjectURL(blob);
@@ -510,7 +506,7 @@ export default function NavigasiPage() {
             ) : (
               <video
                 ref={(el) => {
-                  videoRef[0] = el;
+                  videoRef.current = el;
                   if (el && stream) {
                     el.srcObject = stream;
                   }
