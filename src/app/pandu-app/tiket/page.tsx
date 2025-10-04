@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 
@@ -10,7 +10,7 @@ interface TicketSearchEventDetail {
   date: string;
 }
 
-export default function TiketPage() {
+function TiketPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   
@@ -480,5 +480,22 @@ export default function TiketPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function TiketPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+        <div className="w-full max-w-[430px] min-h-screen bg-white relative overflow-hidden shadow-2xl flex items-center justify-center">
+          <div className="text-center">
+            <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+            <p className="text-gray-600 text-sm">Memuat...</p>
+          </div>
+        </div>
+      </div>
+    }>
+      <TiketPageContent />
+    </Suspense>
   );
 }
