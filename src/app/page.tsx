@@ -209,7 +209,7 @@ export default function Home() {
             {/* Animated Background Effect */}
             
             <div className="relative flex items-center gap-4">
-              <Image src="/images/kaiberdansa.svg" alt="KAI Pandu" width={80} height={80} className="w-20 h-20 object-contain" />
+              <Image src="/images/kaipandudubbies.png" alt="KAI Pandu" width={150} height={150} className="w-20 h-20 object-contain" />
               
               <div className="flex-1">
                 <h3 className="text-white text-2xl font-bold mb-3">Mode KAI Pandu</h3>

@@ -63,6 +63,41 @@ export default function PanduApp() {
     };
   }, [addToTranscript, router]);
 
+  // Listen for ticket booking data from ElevenLabs
+  useEffect(() => {
+    const handleTicketBooking = (event: Event) => {
+      const customEvent = event as CustomEvent;
+      console.log('🎫 Ticket booking data received from ElevenLabs:', customEvent.detail);
+      
+      const { from, to, date } = customEvent.detail || {};
+      
+      if (from && to && date) {
+        console.log('✅ Redirecting to ticket page with data:', { from, to, date });
+        addToTranscript('System', `📍 Mengarahkan ke halaman pemesanan tiket...`);
+        
+        // Navigate to ticket page and dispatch event with data
+        router.push('/pandu-app/tiket');
+        
+        // Wait a bit for the page to load, then send the data
+        setTimeout(() => {
+          const ticketEvent = new CustomEvent('submitTicketSearch', {
+            detail: { from, to, date }
+          });
+          window.dispatchEvent(ticketEvent);
+          console.log('🚀 Sent ticket search event:', { from, to, date });
+        }, 500);
+      } else {
+        console.warn('⚠️ Incomplete ticket data:', { from, to, date });
+      }
+    };
+    
+    window.addEventListener('bookTicket', handleTicketBooking);
+    
+    return () => {
+      window.removeEventListener('bookTicket', handleTicketBooking);
+    };
+  }, [addToTranscript, router]);
+
   return (
     <>
       <div className="min-h-screen bg-gray-900 flex items-center justify-center">
