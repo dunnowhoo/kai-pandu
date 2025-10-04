@@ -39,9 +39,15 @@ function TiketPageContent() {
     const useDestination = destination || selectedDestination;
     const useDate = searchDate || selectedDate;
     
-    // Validation
+    // Validation - check if all required fields are filled
     if (!useOrigin || !useDestination || !useDate) {
-      alert('Mohon lengkapi semua data pemesanan');
+      alert('⚠️ Mohon lengkapi semua data pemesanan:\n- Stasiun keberangkatan\n- Stasiun tujuan\n- Tanggal keberangkatan');
+      return;
+    }
+    
+    // Additional validation - make sure origin and destination are different
+    if (useOrigin.toLowerCase() === useDestination.toLowerCase()) {
+      alert('⚠️ Stasiun keberangkatan dan tujuan tidak boleh sama!');
       return;
     }
     
@@ -90,19 +96,35 @@ function TiketPageContent() {
     // Random train number
     const randomTrainNumber = `No Train ${Math.floor(Math.random() * 500) + 100}`;
     
-    // Show loading
-    setIsLoading(true);
-    
     console.log('🔍 Searching ticket with data:', { useOrigin, useDestination, useDate });
     
     // Simulate API call with 2 second delay
     await new Promise(resolve => setTimeout(resolve, 2000));
     
     // Generate order code
-    const orderCode = 'RVG' + Math.random().toString(36).substring(2, 7).toUpperCase();
+    const orderCode = 'KAI' + Math.random().toString(36).substring(2, 7).toUpperCase();
     
     const formatDate = (dateStr: string) => {
-      const date = new Date(dateStr);
+      // Handle different date formats
+      let date;
+      
+      // Try to parse the date
+      if (dateStr.includes('-')) {
+        // Format: YYYY-MM-DD
+        date = new Date(dateStr);
+      } else if (dateStr.includes('/')) {
+        // Format: DD/MM/YYYY or MM/DD/YYYY
+        date = new Date(dateStr);
+      } else {
+        // Try to parse as is
+        date = new Date(dateStr);
+      }
+      
+      // Fallback to today if invalid
+      if (isNaN(date.getTime())) {
+        date = new Date();
+      }
+      
       const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
       const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
       
@@ -138,12 +160,16 @@ function TiketPageContent() {
     // Save to localStorage
     localStorage.setItem('kai_tickets', JSON.stringify(existingTickets));
     
-    console.log('✅ Random ticket created:', dummyTicket);
+    // Save as last booking for quick access
+    localStorage.setItem('lastBooking', JSON.stringify(dummyTicket));
+    
+    console.log('✅ Tiket berhasil dibuat:', dummyTicket);
+    console.log('📍 Redirecting to My Ticket page...');
     
     // Hide loading
     setIsLoading(false);
     
-    // Redirect to My Ticket page
+    // Direct redirect to My Ticket page - LANGSUNG TANPA PERLU KLIK LAGI!
     router.push('/my-ticket');
   }, [selectedOrigin, selectedDestination, selectedDate, router]);
 
@@ -299,7 +325,7 @@ function TiketPageContent() {
                     type="text"
                     value={selectedOrigin}
                     onChange={(e) => setSelectedOrigin(e.target.value)}
-                    placeholder="Pilih stasiun keberangkatan"
+                    placeholder="Contoh: Jakarta"
                     className="w-full text-gray-900 font-semibold text-base outline-none bg-transparent placeholder:text-gray-300"
                   />
                 </div>
@@ -333,7 +359,7 @@ function TiketPageContent() {
                     type="text"
                     value={selectedDestination}
                     onChange={(e) => setSelectedDestination(e.target.value)}
-                    placeholder="Pilih stasiun tujuan"
+                    placeholder="Contoh: Bandung"
                     className="w-full text-gray-900 font-semibold text-base outline-none bg-transparent placeholder:text-gray-300"
                   />
                 </div>
@@ -356,7 +382,7 @@ function TiketPageContent() {
                     type="text"
                     value={selectedDate}
                     onChange={(e) => setSelectedDate(e.target.value)}
-                    placeholder="Fri, 10 Oct 2025"
+                    placeholder="Contoh: 2025-10-15 atau 15/10/2025"
                     className="w-full text-gray-900 font-semibold text-base outline-none bg-transparent placeholder:text-gray-300"
                   />
                 </div>

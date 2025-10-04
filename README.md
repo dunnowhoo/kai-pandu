@@ -87,7 +87,6 @@ The `/pandu-app` page is a fully interactive prototype featuring:
 - ✅ **Emergency Help Screen** - Staff assistance request flow
 - ✅ **Accessibility-First Design** - Large targets, high contrast, voice-first
 
-**[→ See UI/UX Documentation](./KAI-PANDU-UI-DESIGN.md)**
 
 ## 🛠️ Tech Stack
 
@@ -138,12 +137,6 @@ This is a concept/proposal project. For collaboration inquiries:
 2. Check the demo at `/kai-pandu`
 3. Reach out with feedback or partnership opportunities
 
-## 📄 Documentation
-
-- **[Full Proposal](./KAI-PANDU-PROPOSAL.md)** - Detailed feature specification, technical implementation, business model
-- **[Pitch Deck](./KAI-PANDU-PITCH.md)** - One-page executive summary
-- **[Technical Guide](./KAI-PANDU-TECHNICAL.md)** - Complete technical implementation with ElevenLabs integration
-- **[Backend API](./backend/README.md)** - Voice AI backend documentation
 
 ## 🔗 Links
 
