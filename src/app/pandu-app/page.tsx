@@ -11,7 +11,7 @@ type BookingStep = 'type' | 'origin' | 'destination' | 'date' | 'class' | 'payme
 
 export default function PanduApp() {
   const router = useRouter();
-  const { isActive, transcript, startAgent, stopAgent, addToTranscript } = useVoiceAgent();
+  const { transcript, startAgent, addToTranscript } = useVoiceAgent();
   const [currentView, setCurrentView] = useState<ViewMode>('landing');
   const [bookingStep, setBookingStep] = useState<BookingStep>('type');
   const [showConversation, setShowConversation] = useState(false);
@@ -23,74 +23,6 @@ export default function PanduApp() {
   const [selectedDate, setSelectedDate] = useState('');
   const [selectedClass, setSelectedClass] = useState('');
   const [selectedPayment, setSelectedPayment] = useState('');
-  const [isRoundTrip, setIsRoundTrip] = useState(false);
-
-  // Handle booking data from voice assistant
-  const handleBookingData = (data: {
-    from?: string;
-    to?: string;
-    date?: string;
-    trainType?: string;
-    class?: string;
-  }) => {
-    console.log('📝 Received booking data from voice:', data);
-    
-    if (data.from) {
-      setSelectedOrigin(data.from);
-      console.log('✅ Set origin:', data.from);
-    }
-    if (data.to) {
-      setSelectedDestination(data.to);
-      console.log('✅ Set destination:', data.to);
-    }
-    if (data.date) {
-      setSelectedDate(data.date);
-      console.log('✅ Set date:', data.date);
-    }
-    if (data.trainType) {
-      setSelectedType(data.trainType);
-      console.log('✅ Set train type:', data.trainType);
-    }
-    if (data.class) {
-      setSelectedClass(data.class);
-      console.log('✅ Set class:', data.class);
-    }
-    
-    addToTranscript('System', `✅ Data pemesanan telah diperbarui`);
-  };
-
-  // Handle navigation from voice commands
-  const handleVoiceNavigation = (path: string) => {
-    console.log('🎯 HANDLEVOICENAVIGATION CALLED!');
-    console.log('🔄 Voice navigation to:', path);
-    console.log('🔍 Current view before:', currentView);
-    
-    // Force browser alert for debugging
-    alert(`🔄 handleVoiceNavigation called with path: ${path}`);
-    
-    // Map paths to routes
-    if (path.includes('ticket') || path.includes('pesan') || path.includes('/ticket')) {
-      console.log('📍 Matched ticket path - navigating to /pandu-app/tiket');
-      router.push('/pandu-app/tiket');
-    } else if (path.includes('navigation') || path.includes('navigasi') || path.includes('/navigation')) {
-      console.log('📍 Matched navigation path - navigating to /pandu-app/navigasi');
-      router.push('/pandu-app/navigasi');
-    } else if (path.includes('help') || path.includes('bantuan') || path.includes('/help')) {
-      console.log('📍 Matched help path - navigating to /pandu-app/help');
-      router.push('/pandu-app/help');
-    } else if (path.includes('home') || path.includes('landing') || path.includes('/landing')) {
-      console.log('📍 Matched landing path');
-      setCurrentView('landing');
-      addToTranscript('System', `📍 Berpindah ke halaman landing`);
-    } else {
-      console.log('⚠️ No path matched, keeping current view');
-    }
-    
-    console.log('✅ Navigation completed');
-    
-    // Force alert to confirm
-    alert(`✅ Navigation completed`);
-  };
 
   // Auto-scroll transcript
   useEffect(() => {
@@ -102,11 +34,14 @@ export default function PanduApp() {
 
   // Add custom event listener for navigation
   useEffect(() => {
-    const handleNavigationEvent = (event: any) => {
+    interface NavigationEventDetail {
+      view?: string;
+      path?: string;
+    }
+
+    const handleNavigationEvent = (event: CustomEvent<NavigationEventDetail>) => {
       console.log('🎯 Custom navigation event received:', event.detail);
-      const { view, path } = event.detail;
-      
-      alert(`🎯 Custom event navigation to view: ${view}`);
+      const { view } = event.detail;
       
       if (view && ['landing', 'ticket-booking'].includes(view)) {
         console.log('🚀 Setting view via custom event:', view);
@@ -121,20 +56,12 @@ export default function PanduApp() {
       }
     };
     
-    window.addEventListener('navigateToView', handleNavigationEvent);
+    window.addEventListener('navigateToView', handleNavigationEvent as EventListener);
     
     return () => {
-      window.removeEventListener('navigateToView', handleNavigationEvent);
+      window.removeEventListener('navigateToView', handleNavigationEvent as EventListener);
     };
-  }, []);
-
-  const startPandu = () => {
-    setShowConversation(true);
-    startAgent();
-    
-    // Show loading indicator for widget initialization
-    console.log('🚀 Starting KAI Pandu voice assistant...');
-  };
+  }, [addToTranscript, router]);
 
   return (
     <>
@@ -334,6 +261,25 @@ export default function PanduApp() {
 }
 
 // TICKET BOOKING COMPONENT
+interface TicketBookingViewProps {
+  step: BookingStep;
+  onStepChange: (step: BookingStep) => void;
+  onBack: () => void;
+  addToTranscript: (speaker: string, message: string) => void;
+  selectedType: string;
+  setSelectedType: (value: string) => void;
+  selectedOrigin: string;
+  setSelectedOrigin: (value: string) => void;
+  selectedDestination: string;
+  setSelectedDestination: (value: string) => void;
+  selectedDate: string;
+  setSelectedDate: (value: string) => void;
+  selectedClass: string;
+  setSelectedClass: (value: string) => void;
+  selectedPayment: string;
+  setSelectedPayment: (value: string) => void;
+}
+
 function TicketBookingView({ 
   step, 
   onStepChange, 
@@ -345,7 +291,7 @@ function TicketBookingView({
   selectedDate, setSelectedDate,
   selectedClass, setSelectedClass,
   selectedPayment, setSelectedPayment
-}: any) {
+}: TicketBookingViewProps) {
   const trainTypes = ['Antarkota', 'Commuter Line', 'LRT', 'Whoosh'];
   const stations = ['Gambir', 'Pasar Senen', 'Yogyakarta', 'Bandung', 'Surabaya'];
   const classes = ['Eksekutif', 'Bisnis', 'Ekonomi'];

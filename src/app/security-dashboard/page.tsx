@@ -38,6 +38,42 @@ interface SecurityOfficer {
   mapPosition?: { x: number; y: number };
 }
 
+interface DashboardContentProps {
+  requests: AssistanceRequest[];
+  securityOfficers: SecurityOfficer[];
+  filterStatus: string;
+  setFilterStatus: (status: string) => void;
+  filterPriority: string;
+  setFilterPriority: (priority: string) => void;
+  filteredRequests: AssistanceRequest[];
+  setSelectedRequest: (request: AssistanceRequest | null) => void;
+  getStatusColor: (status: string) => string;
+  getPriorityColor: (priority: string) => string;
+  setShowOfficersList: (show: boolean) => void;
+}
+
+interface LiveStationMapProps {
+  requests: AssistanceRequest[];
+  officers: SecurityOfficer[];
+  highlightedUser: string | null;
+  onUserClick: (userId: string) => void;
+}
+
+interface RequestDetailModalProps {
+  request: AssistanceRequest;
+  onClose: () => void;
+  getStatusColor: (status: string) => string;
+  getPriorityColor: (priority: string) => string;
+  getStatusText: (status: string) => string;
+  getPriorityText: (priority: string) => string;
+}
+
+interface OfficersListModalProps {
+  officers: SecurityOfficer[];
+  requests: AssistanceRequest[];
+  onClose: () => void;
+}
+
 export default function SecurityDashboard() {
   const [activeTab, setActiveTab] = useState<'dashboard' | 'reports'>('dashboard');
   const [requests, setRequests] = useState<AssistanceRequest[]>([]);
@@ -375,10 +411,10 @@ function DashboardContent({
   getStatusColor,
   getPriorityColor,
   setShowOfficersList
-}: any) {
+}: DashboardContentProps) {
   const [highlightedUser, setHighlightedUser] = useState<string | null>(null);
-  const activeRequests = requests.filter((r: any) => r.isActive);
-  const urgentAlerts = requests.filter((r: any) => r.alertType === 'emergency' && r.status !== 'completed');
+  const activeRequests = requests.filter(r => r.isActive);
+  const urgentAlerts = requests.filter(r => r.alertType === 'emergency' && r.status !== 'completed');
 
   return (
     <div className="space-y-6">
@@ -391,7 +427,7 @@ function DashboardContent({
             officers={securityOfficers}
             highlightedUser={highlightedUser}
             onUserClick={(userId: string) => {
-              const request = requests.find((r: any) => r.id === userId);
+              const request = requests.find(r => r.id === userId);
               if (request) setSelectedRequest(request);
             }}
           />
@@ -449,8 +485,8 @@ function DashboardContent({
           
           <div className="mt-4 pt-4 border-t border-gray-100">
             <div className="flex justify-between text-xs text-gray-600">
-              <span>Berlangsung: {requests.filter((r: any) => r.status === 'in-progress').length}</span>
-              <span>Ditugaskan: {requests.filter((r: any) => r.status === 'assigned').length}</span>
+              <span>Berlangsung: {requests.filter(r => r.status === 'in-progress').length}</span>
+              <span>Ditugaskan: {requests.filter(r => r.status === 'assigned').length}</span>
             </div>
           </div>
         </div>
@@ -467,7 +503,7 @@ function DashboardContent({
           </div>
           <h3 className="text-lg font-bold text-gray-900 mb-1">Petugas Tersedia</h3>
           <p className="text-3xl font-bold text-green-600 mb-2">
-            {securityOfficers.filter((s: any) => s.status === 'available').length}
+            {securityOfficers.filter(s => s.status === 'available').length}
           </p>
           <p className="text-sm text-gray-500">dari {securityOfficers.length} total petugas</p>
           
@@ -475,7 +511,7 @@ function DashboardContent({
             <div className="w-full bg-gray-200 rounded-full h-2">
               <div 
                 className="bg-gradient-to-r from-green-500 to-emerald-600 h-2 rounded-full transition-all" 
-                style={{ width: `${(securityOfficers.filter((s: any) => s.status === 'available').length / securityOfficers.length) * 100}%` }}
+                style={{ width: `${(securityOfficers.filter(s => s.status === 'available').length / securityOfficers.length) * 100}%` }}
               ></div>
             </div>
           </div>
@@ -534,7 +570,7 @@ function DashboardContent({
         </div>
 
         <div className="space-y-3">
-          {filteredRequests.map((request: any) => (
+          {filteredRequests.map(request => (
             <div 
               key={request.id} 
               className={`flex items-center justify-between p-4 rounded-2xl transition-all cursor-pointer ${
@@ -626,7 +662,7 @@ function DashboardContent({
 }
 
 // Live Station Map Component
-function LiveStationMap({ requests, officers, highlightedUser, onUserClick }: any) {
+function LiveStationMap({ requests, officers, highlightedUser, onUserClick }: LiveStationMapProps) {
   return (
     <div className="bg-white rounded-3xl shadow-sm overflow-hidden h-[600px] flex flex-col">
       {/* Header - Di margin putih atas */}
@@ -662,7 +698,7 @@ function LiveStationMap({ requests, officers, highlightedUser, onUserClick }: an
         {/* Overlay untuk markers */}
         <div className="absolute inset-0">
           {/* User Markers - Di atas foto */}
-          {requests.map((request: any) => (
+          {requests.map(request => (
             <div
               key={request.id}
               className={`absolute transition-all duration-300 cursor-pointer ${
@@ -710,7 +746,7 @@ function LiveStationMap({ requests, officers, highlightedUser, onUserClick }: an
           ))}
 
           {/* Security Officer Markers - Di atas foto */}
-          {officers.map((officer: any) => (
+          {officers.map(officer => (
             <div
               key={officer.id}
               className="absolute z-20"
@@ -765,19 +801,19 @@ function LiveStationMap({ requests, officers, highlightedUser, onUserClick }: an
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
               <span className="text-gray-600">
-                <span className="font-bold text-gray-900">{requests.filter((r: any) => r.alertType === 'normal').length}</span> Normal
+                <span className="font-bold text-gray-900">{requests.filter(r => r.alertType === 'normal').length}</span> Normal
               </span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
               <span className="text-gray-600">
-                <span className="font-bold text-gray-900">{requests.filter((r: any) => r.alertType === 'stuck').length}</span> Terhambat
+                <span className="font-bold text-gray-900">{requests.filter(r => r.alertType === 'stuck').length}</span> Terhambat
               </span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
               <span className="text-gray-600">
-                <span className="font-bold text-red-600">{requests.filter((r: any) => r.alertType === 'emergency').length}</span> Darurat
+                <span className="font-bold text-red-600">{requests.filter(r => r.alertType === 'emergency').length}</span> Darurat
               </span>
             </div>
           </div>
@@ -806,7 +842,7 @@ function ReportsContent() {
 }
 
 // Request Detail Modal Component
-function RequestDetailModal({ request, onClose, getStatusColor, getPriorityColor, getStatusText, getPriorityText }: any) {
+function RequestDetailModal({ request, onClose, getStatusColor, getPriorityColor, getStatusText, getPriorityText }: RequestDetailModalProps) {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
       <div className="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
@@ -921,7 +957,7 @@ function RequestDetailModal({ request, onClose, getStatusColor, getPriorityColor
 }
 
 // Officers List Modal Component
-function OfficersListModal({ officers, requests, onClose }: any) {
+function OfficersListModal({ officers, requests, onClose }: OfficersListModalProps) {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'available':
@@ -957,7 +993,7 @@ function OfficersListModal({ officers, requests, onClose }: any) {
             <div>
               <h2 className="text-2xl font-bold text-gray-900">Daftar Petugas Keamanan</h2>
               <p className="text-sm text-gray-500 mt-1">
-                {officers.filter((o: any) => o.status === 'available').length} tersedia dari {officers.length} petugas
+                {officers.filter(o => o.status === 'available').length} tersedia dari {officers.length} petugas
               </p>
             </div>
             <button
@@ -972,7 +1008,7 @@ function OfficersListModal({ officers, requests, onClose }: any) {
 
           {/* Officers Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {officers.map((officer: any) => (
+            {officers.map(officer => (
               <div 
                 key={officer.id}
                 className="bg-gradient-to-br from-gray-50 to-white border-2 border-gray-200 rounded-2xl p-5 hover:shadow-lg transition-all"
@@ -1020,7 +1056,7 @@ function OfficersListModal({ officers, requests, onClose }: any) {
                       <p className="text-xs font-semibold text-gray-500 uppercase mb-2">Tugas Saat Ini:</p>
                       <div className="space-y-2">
                         {officer.assignedRequests.map((reqId: string) => {
-                          const request = requests.find((r: any) => r.id === reqId);
+                          const request = requests.find(r => r.id === reqId);
                           return request ? (
                             <div key={reqId} className="bg-white rounded-lg p-2 text-xs">
                               <div className="flex items-center justify-between">
@@ -1062,19 +1098,19 @@ function OfficersListModal({ officers, requests, onClose }: any) {
             <div className="grid grid-cols-3 gap-4 text-center">
               <div>
                 <p className="text-2xl font-bold text-green-600">
-                  {officers.filter((o: any) => o.status === 'available').length}
+                  {officers.filter(o => o.status === 'available').length}
                 </p>
                 <p className="text-xs text-gray-500 mt-1">Tersedia</p>
               </div>
               <div>
                 <p className="text-2xl font-bold text-yellow-600">
-                  {officers.filter((o: any) => o.status === 'busy').length}
+                  {officers.filter(o => o.status === 'busy').length}
                 </p>
                 <p className="text-xs text-gray-500 mt-1">Sibuk</p>
               </div>
               <div>
                 <p className="text-2xl font-bold text-gray-600">
-                  {officers.filter((o: any) => o.status === 'off-duty').length}
+                  {officers.filter(o => o.status === 'off-duty').length}
                 </p>
                 <p className="text-xs text-gray-500 mt-1">Off Duty</p>
               </div>
