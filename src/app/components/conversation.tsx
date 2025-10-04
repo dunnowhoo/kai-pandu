@@ -6,11 +6,10 @@ import { useRouter } from 'next/navigation';
 
 interface ConversationProps {
   onTranscriptUpdate?: (speaker: string, message: string) => void;
-  onNavigate?: (path: string) => void;
   autoStart?: boolean;
 }
 
-export function Conversation({ onTranscriptUpdate, onNavigate, autoStart = false }: ConversationProps = {}) {
+export function Conversation({ onTranscriptUpdate, autoStart = false }: ConversationProps = {}) {
   const router = useRouter();
   const [isPermissionGranted, setIsPermissionGranted] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -185,7 +184,7 @@ Mencari jadwal kereta untuk Anda...`;
       console.error('❌ Conversation error:', error);
       const errorMessage = typeof error === 'string' 
         ? error 
-        : (error as any)?.message || 'Terjadi kesalahan pada percakapan';
+        : (error as Error)?.message || 'Terjadi kesalahan pada percakapan';
       setError(errorMessage);
       
       if (onTranscriptUpdate) {
@@ -232,9 +231,10 @@ Mencari jadwal kereta untuk Anda...`;
         onTranscriptUpdate('System', 'KAI Pandu siap membantu Anda');
       }
 
-    } catch (error: any) {
+    } catch (error) {
       console.error('❌ Failed to start conversation:', error);
-      setError(error.message || 'Gagal memulai percakapan');
+      const errorMessage = error instanceof Error ? error.message : 'Gagal memulai percakapan';
+      setError(errorMessage);
       
       if (onTranscriptUpdate) {
         onTranscriptUpdate('System', 'Gagal terhubung ke KAI Pandu. Silakan coba lagi.');
@@ -251,9 +251,10 @@ Mencari jadwal kereta untuk Anda...`;
       if (onTranscriptUpdate) {
         onTranscriptUpdate('System', 'Percakapan dengan KAI Pandu dihentikan');
       }
-    } catch (error: any) {
+    } catch (error) {
       console.error('❌ Failed to stop conversation:', error);
-      setError(error.message || 'Gagal menghentikan percakapan');
+      const errorMessage = error instanceof Error ? error.message : 'Gagal menghentikan percakapan';
+      setError(errorMessage);
     }
   }, [conversation, onTranscriptUpdate]);
 

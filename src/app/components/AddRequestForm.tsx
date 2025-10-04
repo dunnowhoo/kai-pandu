@@ -4,8 +4,27 @@ import { useState } from 'react';
 
 type DisabilityType = 'visual' | 'mobility' | 'hearing' | 'cognitive' | 'elderly' | 'pregnant';
 
+interface RequestData {
+  id: string;
+  passengerName: string;
+  disabilityType: DisabilityType;
+  description: string;
+  trainNumber: string;
+  destination: string;
+  carNumber: string;
+  seatNumber: string;
+  departureTime: string;
+  location: string;
+  priority: string;
+  contactNumber: string;
+  specialNotes: string;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 interface AddRequestFormProps {
-  onSubmit: (requestData: any) => void;
+  onSubmit: (requestData: RequestData) => void;
   onCancel: () => void;
 }
 

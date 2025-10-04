@@ -29,9 +29,26 @@ interface ReportData {
   }[];
 }
 
+interface Request {
+  id: string;
+  status: string;
+  disabilityType: string;
+  priority: string;
+  createdAt: string;
+  updatedAt: string;
+  assignedTo?: string;
+  securityId?: string;
+}
+
+interface SecurityOfficer {
+  id: string;
+  name: string;
+  status: string;
+}
+
 interface ReportsComponentProps {
-  requests: any[];
-  securityOfficers: any[];
+  requests: Request[];
+  securityOfficers: SecurityOfficer[];
 }
 
 export function ReportsComponent({ requests, securityOfficers }: ReportsComponentProps) {

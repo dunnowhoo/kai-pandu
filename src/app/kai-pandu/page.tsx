@@ -80,7 +80,7 @@ export default function KaiPandu() {
                   </div>
                   <div className="flex-1">
                     <p className="text-gray-700 text-sm italic mb-2">
-                      "Saya ingin pesan tiket dari Gambir ke Yogyakarta tanggal 15 Oktober, ada kereta apa saja?"
+                      &ldquo;Saya ingin pesan tiket dari Gambir ke Yogyakarta tanggal 15 Oktober, ada kereta apa saja?&rdquo;
                     </p>
                     <p className="text-gray-600 text-xs">
                       → Asisten AI memandu Anda langkah demi langkah hingga pembayaran selesai
@@ -130,7 +130,7 @@ export default function KaiPandu() {
                     </svg>
                   </div>
                   <p className="text-gray-700 text-sm flex-1">
-                    <strong>Panduan Suara:</strong> "Gerbang 20m di depan, belok kanan ke Peron 3"
+                    <strong>Panduan Suara:</strong> &ldquo;Gerbang 20m di depan, belok kanan ke Peron 3&rdquo;
                   </p>
                 </div>
               </div>
