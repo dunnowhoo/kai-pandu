@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import Link from 'next/link';
 
 type NavPhase = 'gate' | 'platform' | 'boarding' | 'seat' | 'arrival';
@@ -38,15 +38,15 @@ export default function NavigasiPage() {
   const [showETA, setShowETA] = useState(false);
   const [currentStation, setCurrentStation] = useState<string | null>(null);
 
-  const walaharSchedule = [
+  const walaharSchedule = useMemo(() => [
     { trainNumber: 'KA 326', departure: '06:00', route: 'Cikarang - Purwakarta' },
     { trainNumber: 'KA 328', departure: '07:48', route: 'Cikarang - Purwakarta' },
     { trainNumber: 'KA 330', departure: '11:36', route: 'Cikarang - Purwakarta' },
     { trainNumber: 'KA 332', departure: '13:26', route: 'Cikarang - Purwakarta' },
     { trainNumber: 'KA 334', departure: '18:35', route: 'Cikarang - Purwakarta' },
-  ];
+  ], []);
 
-  const stations: Station[] = [
+  const stations: Station[] = useMemo(() => [
     { name: 'Gambir', code: 'GMR', lat: -6.1761, lng: 106.8310 },
     { name: 'Pasar Senen', code: 'PSE', lat: -6.1760, lng: 106.8446 },
     { name: 'Jatinegara', code: 'JNG', lat: -6.2156, lng: 106.8707 },
@@ -78,7 +78,7 @@ export default function NavigasiPage() {
     { name: 'Surabaya Gubeng', code: 'SGU', lat: -7.2650, lng: 112.7520 },
     { name: 'Surabaya Pasarturi', code: 'SPT', lat: -7.2407, lng: 112.7341 },
     { name: 'Malang', code: 'ML', lat: -7.9785, lng: 112.6304 },
-  ];
+  ], []);
 
   const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number): number => {
     const R = 6371; // Radius bumi dalam km
@@ -187,7 +187,7 @@ export default function NavigasiPage() {
     };
 
     checkLocation();
-  }, [checkNextTrain]);
+  }, [checkNextTrain, stations]);
 
   // ETA Countdown Timer
   useEffect(() => {
